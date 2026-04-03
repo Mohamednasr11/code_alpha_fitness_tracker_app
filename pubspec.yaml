@@ -1,0 +1,38 @@
+name: fitness_tracker
+description: A fitness tracker app built with Flutter Clean Architecture.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management
+  flutter_bloc: 
+  equatable:
+
+  # Dependency Injection
+  get_it:
+
+  # Local Database
+  sqflite:
+  path:
+
+  # Charts
+  fl_chart:
+
+  # UI
+  iconsax:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  bloc_test:
+  mocktail:
+
+flutter:
+  uses-material-design: true
