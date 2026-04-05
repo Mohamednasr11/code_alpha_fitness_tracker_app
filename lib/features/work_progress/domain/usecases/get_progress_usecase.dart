@@ -1,5 +1,3 @@
-
-
 import '../entities/models/exercise_progress.dart';
 import '../repos/progress_repo.dart';
 
@@ -13,6 +11,5 @@ class GetProgressUsecase {
   Future<ExerciseProgress> forExercise(String exerciseName) =>
       _repository.getProgressForExercise(exerciseName);
 
-  Future<Map<String, double>> overallStats() =>
-      _repository.getOverallStats();
+  Future<Map<String, double>> overallStats() => _repository.getOverallStats();
 }

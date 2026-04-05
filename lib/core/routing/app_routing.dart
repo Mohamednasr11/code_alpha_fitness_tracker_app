@@ -5,7 +5,6 @@ import '../../features/work_log/domain/entities/workout_session.dart';
 import '../../features/work_log/presentation/pages/workout_detail_page.dart';
 import '../../main_shell.dart';
 
-
 class AppRouter {
   AppRouter._();
 

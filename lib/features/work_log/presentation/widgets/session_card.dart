@@ -25,8 +25,14 @@ class SessionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textPrimary = theme.textTheme.bodyLarge?.color ?? Colors.white;
+    final textSecondary = theme.textTheme.bodyMedium?.color ?? Colors.grey;
+    final cardColor = theme.cardTheme.color ?? AppColors.cardColor;
+    final dividerColor = theme.dividerTheme.color ?? AppColors.divider;
+
     final totalVolume =
-    session.sets.fold<double>(0, (sum, s) => sum + (s.reps * s.weight));
+        session.sets.fold<double>(0, (sum, s) => sum + (s.reps * s.weight));
     final exercises = session.sets.map((s) => s.exercise.name).toSet();
 
     return Dismissible(
@@ -45,11 +51,11 @@ class SessionCard extends StatelessWidget {
         return await showDialog<bool>(
           context: context,
           builder: (_) => AlertDialog(
-            backgroundColor: AppColors.surface,
-            title: const Text('Delete Session',
-                style: TextStyle(color: AppColors.textPrimary)),
-            content: const Text('Are you sure you want to delete this workout?',
-                style: TextStyle(color: AppColors.textSecondary)),
+            backgroundColor: theme.scaffoldBackgroundColor,
+            title: Text('Delete Session',
+                style: TextStyle(color: textPrimary)),
+            content: Text('Are you sure you want to delete this workout?',
+                style: TextStyle(color: textSecondary)),
             actions: [
               TextButton(
                   onPressed: () => Navigator.pop(context, false),
@@ -69,9 +75,9 @@ class SessionCard extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: AppColors.cardColor,
+            color: cardColor,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.divider),
+            border: Border.all(color: dividerColor),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,13 +86,13 @@ class SessionCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(session.name,
-                      style: const TextStyle(
-                          color: AppColors.textPrimary,
+                      style: TextStyle(
+                          color: textPrimary,
                           fontSize: 16,
                           fontWeight: FontWeight.bold)),
                   Text(_formatDate(session.date),
-                      style: const TextStyle(
-                          color: AppColors.textSecondary, fontSize: 13)),
+                      style: TextStyle(
+                          color: textSecondary, fontSize: 13)),
                 ],
               ),
               if (exercises.isNotEmpty) ...[
@@ -96,20 +102,20 @@ class SessionCard extends StatelessWidget {
                       (exercises.length > 3
                           ? ' +${exercises.length - 3} more'
                           : ''),
-                  style: const TextStyle(
-                      color: AppColors.textSecondary, fontSize: 13),
+                  style: TextStyle(
+                      color: textSecondary, fontSize: 13),
                 ),
               ],
               const SizedBox(height: 12),
               Row(
                 children: [
-                  _infoChip(Iconsax.activity, '${session.sets.length} sets'),
+                  _infoChip(Iconsax.activity, '${session.sets.length} sets', textSecondary),
                   const SizedBox(width: 12),
                   _infoChip(Iconsax.weight,
-                      '${totalVolume.toStringAsFixed(0)} kg volume'),
+                      '${totalVolume.toStringAsFixed(0)} kg volume', textSecondary),
                   const Spacer(),
-                  const Icon(Iconsax.arrow_right_3,
-                      color: AppColors.textHint, size: 16),
+                  Icon(Iconsax.arrow_right_3,
+                      color: theme.hintColor, size: 16),
                 ],
               ),
             ],
@@ -119,14 +125,14 @@ class SessionCard extends StatelessWidget {
     );
   }
 
-  Widget _infoChip(IconData icon, String label) {
+  Widget _infoChip(IconData icon, String label, Color textColor) {
     return Row(
       children: [
         Icon(icon, size: 14, color: AppColors.primary),
         const SizedBox(width: 4),
         Text(label,
-            style: const TextStyle(
-                color: AppColors.textSecondary, fontSize: 12)),
+            style:
+                TextStyle(color: textColor, fontSize: 12)),
       ],
     );
   }

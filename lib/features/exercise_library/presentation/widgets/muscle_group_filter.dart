@@ -22,7 +22,7 @@ class MuscleGroupFilter extends StatelessWidget {
     'Cardio',
   ];
 
-  static Color _colorForGroup(String group) {
+  static Color _colorForGroup(String group, Color primary) {
     switch (group) {
       case 'Chest':
         return AppColors.chest;
@@ -39,12 +39,18 @@ class MuscleGroupFilter extends StatelessWidget {
       case 'Cardio':
         return AppColors.cardio;
       default:
-        return AppColors.primary;
+        return primary;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cardColor = theme.cardTheme.color ?? Colors.white;
+    final textSecondary = theme.textTheme.bodyMedium?.color ?? Colors.grey;
+    final dividerColor = theme.dividerTheme.color ?? Colors.grey.withOpacity(0.2);
+    final primaryColor = theme.colorScheme.primary;
+
     return SizedBox(
       height: 40,
       child: ListView.separated(
@@ -55,7 +61,7 @@ class MuscleGroupFilter extends StatelessWidget {
         itemBuilder: (_, i) {
           final group = _groups[i];
           final isSelected = group == selected;
-          final color = _colorForGroup(group);
+          final color = _colorForGroup(group, primaryColor);
 
           return GestureDetector(
             onTap: () => onSelected(group),
@@ -64,16 +70,18 @@ class MuscleGroupFilter extends StatelessWidget {
               padding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: isSelected ? color : AppColors.surfaceVariant,
+                color: isSelected ? color : cardColor,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: isSelected ? color : AppColors.divider,
+                  color: isSelected ? color : dividerColor,
                 ),
               ),
               child: Text(
                 group,
                 style: TextStyle(
-                  color: isSelected ? AppColors.background : AppColors.textSecondary,
+                  color: isSelected
+                      ? Colors.white
+                      : textSecondary,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                   fontSize: 13,
                 ),

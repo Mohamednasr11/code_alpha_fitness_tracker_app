@@ -31,16 +31,21 @@ class ExerciseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final color = _colorForGroup(exercise.muscleGroup);
+    final textPrimary = theme.textTheme.bodyLarge?.color ?? Colors.black;
+    final textSecondary = theme.textTheme.bodyMedium?.color ?? Colors.grey;
+    final cardColor = theme.cardTheme.color ?? Colors.white;
+    final dividerColor = theme.dividerTheme.color ?? Colors.grey.withOpacity(0.2);
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: AppColors.cardColor,
+          color: cardColor,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.divider),
+          border: Border.all(color: dividerColor),
         ),
         child: Row(
           children: [
@@ -62,8 +67,8 @@ class ExerciseCard extends StatelessWidget {
                 children: [
                   Text(
                     exercise.name,
-                    style: const TextStyle(
-                      color: AppColors.textPrimary,
+                    style: TextStyle(
+                      color: textPrimary,
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                     ),
@@ -71,8 +76,8 @@ class ExerciseCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     exercise.description,
-                    style: const TextStyle(
-                      color: AppColors.textSecondary,
+                    style: TextStyle(
+                      color: textSecondary,
                       fontSize: 12,
                     ),
                     maxLines: 1,
@@ -84,8 +89,7 @@ class ExerciseCard extends StatelessWidget {
 
             // Muscle group badge
             Container(
-              padding:
-              const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
                 color: color.withOpacity(0.15),
                 borderRadius: BorderRadius.circular(20),

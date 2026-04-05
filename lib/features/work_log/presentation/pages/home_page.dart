@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 
 import '../../../../core/routing/app_routing.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/animations_helper/app_animation.dart';
 import '../cubits/workout_cubit.dart';
 import '../widgets/new_session_n=bottom_sheet.dart';
 import '../widgets/session_card.dart';
@@ -13,6 +14,9 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textSecondary = theme.textTheme.bodyMedium?.color ?? Colors.grey;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Fitness Tracker'),
@@ -29,7 +33,7 @@ class HomePage extends StatelessWidget {
         builder: (context, state) {
           if (state is WorkoutLoading) {
             return const Center(
-                child: CircularProgressIndicator(color: AppColors.primary));
+                child: CircularProgressIndicator());
           }
           if (state is WorkoutError) {
             return Center(
@@ -38,7 +42,7 @@ class HomePage extends StatelessWidget {
           }
           if (state is WorkoutLoaded) {
             if (state.sessions.isEmpty) {
-              return _buildEmpty(context);
+              return _buildEmpty(context, textSecondary);
             }
             return _buildSessionList(context, state);
           }
@@ -47,8 +51,8 @@ class HomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showNewSessionSheet(context),
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.background,
+        backgroundColor: theme.colorScheme.primary,
+        foregroundColor: theme.colorScheme.onPrimary,
         icon: const Icon(Iconsax.add),
         label: const Text('New Workout',
             style: TextStyle(fontWeight: FontWeight.bold)),
@@ -56,27 +60,38 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildEmpty(BuildContext context) {
+  Widget _buildEmpty(BuildContext context, Color textSecondary) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Iconsax.weight, size: 64, color: AppColors.textHint),
+          AnimatedListItem(
+            index: 0,
+            child: Icon(Iconsax.weight, size: 64, color: textSecondary.withOpacity(0.5)),
+          ),
           const SizedBox(height: 16),
-          const Text('No workouts yet',
-              style: TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold)),
+          const AnimatedListItem(
+            index: 1,
+            child: Text('No workouts yet',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold)),
+          ),
           const SizedBox(height: 8),
-          const Text('Tap the button below to start your first session',
-              style: TextStyle(color: AppColors.textSecondary),
-              textAlign: TextAlign.center),
+          AnimatedListItem(
+            index: 2,
+            child: Text('Tap the button below to start your first session',
+                style: TextStyle(color: textSecondary),
+                textAlign: TextAlign.center),
+          ),
           const SizedBox(height: 24),
-          ElevatedButton.icon(
-            onPressed: () => _showNewSessionSheet(context),
-            icon: const Icon(Iconsax.add),
-            label: const Text('Start Workout'),
+          AnimatedListItem(
+            index: 3,
+            child: ElevatedButton.icon(
+              onPressed: () => _showNewSessionSheet(context),
+              icon: const Icon(Iconsax.add),
+              label: const Text('Start Workout'),
+            ),
           ),
         ],
       ),
@@ -90,14 +105,18 @@ class HomePage extends StatelessWidget {
       separatorBuilder: (_, __) => const SizedBox(height: 12),
       itemBuilder: (_, i) {
         final session = state.sessions[i];
-        return SessionCard(
-          session: session,
-          onTap: () => Navigator.pushNamed(
-            context,
-            AppRouter.workoutDetail,
-            arguments: session,
+        return AnimatedListItem(
+          index: i,
+          child: SessionCard(
+            session: session,
+            onTap: () => Navigator.pushNamed(
+              context,
+              AppRouter.workoutDetail,
+              arguments: session,
+            ),
+            onDelete: () =>
+                context.read<WorkoutCubit>().removeSession(session.id!),
           ),
-          onDelete: () => context.read<WorkoutCubit>().removeSession(session.id!),
         );
       },
     );
@@ -107,14 +126,14 @@ class HomePage extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (_) => NewSessionBottomSheet(
         onCreateSession: (name) async {
           final session =
-          await context.read<WorkoutCubit>().startNewSession(name);
+              await context.read<WorkoutCubit>().startNewSession(name);
           if (session != null && context.mounted) {
             Navigator.pop(context);
             Navigator.pushNamed(context, AppRouter.workoutDetail,

@@ -10,7 +10,6 @@ class ExerciseRepositoryImpl implements ExerciseRepository {
   @override
   Future<List<Exercise>> getAllExercises() => _datasource.getAllExercises();
 
-
   @override
   Future<List<Exercise>> getExercisesByMuscleGroup(String muscleGroup) =>
       _datasource.getExercisesByMuscleGroup(muscleGroup);

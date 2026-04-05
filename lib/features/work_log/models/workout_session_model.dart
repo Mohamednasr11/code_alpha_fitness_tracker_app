@@ -1,4 +1,3 @@
-
 import '../domain/entities/workout_session.dart';
 import '../domain/entities/workout_set.dart';
 
@@ -13,9 +12,9 @@ class WorkoutSessionModel extends WorkoutSession {
   });
 
   factory WorkoutSessionModel.fromMap(
-      Map<String, dynamic> map, {
-        List<WorkoutSet> sets = const [],
-      }) =>
+    Map<String, dynamic> map, {
+    List<WorkoutSet> sets = const [],
+  }) =>
       WorkoutSessionModel(
         id: map['id'] as int,
         name: map['name'] as String,
@@ -26,10 +25,10 @@ class WorkoutSessionModel extends WorkoutSession {
       );
 
   Map<String, dynamic> toMap() => {
-    if (id != null) 'id': id,
-    'name': name,
-    'date': date.toIso8601String(),
-    'notes': notes,
-    'duration_minutes': durationMinutes,
-  };
+        if (id != null) 'id': id,
+        'name': name,
+        'date': date.toIso8601String(),
+        'notes': notes,
+        'duration_minutes': durationMinutes,
+      };
 }

@@ -46,17 +46,16 @@ class ExerciseCubit extends Cubit<ExerciseState> {
     var filtered = allExercises;
 
     if (_selectedMuscleGroup != 'All') {
-      filtered = filtered
-          .where((e) => e.muscleGroup == _selectedMuscleGroup)
-          .toList();
+      filtered =
+          filtered.where((e) => e.muscleGroup == _selectedMuscleGroup).toList();
     }
 
     if (_searchQuery.isNotEmpty) {
       final q = _searchQuery.toLowerCase();
       filtered = filtered
           .where((e) =>
-      e.name.toLowerCase().contains(q) ||
-          e.muscleGroup.toLowerCase().contains(q))
+              e.name.toLowerCase().contains(q) ||
+              e.muscleGroup.toLowerCase().contains(q))
           .toList();
     }
 

@@ -4,6 +4,7 @@ import '../../domain/entities/models/exercise_progress.dart';
 import '../../domain/usecases/get_progress_usecase.dart';
 
 part 'progress_state.dart';
+
 class ProgressCubit extends Cubit<ProgressState> {
   final GetProgressUsecase _usecase;
   ProgressCubit(this._usecase) : super(ProgressInitial());

@@ -9,7 +9,6 @@ import '../../domain/usecases/delete_session_usecase.dart';
 import '../../domain/usecases/get_sessions_usecase.dart';
 import '../../../work_progress/presentation/cubits/progress_cubit.dart';
 
-
 part 'workout_state.dart';
 
 class WorkoutCubit extends Cubit<WorkoutState> {

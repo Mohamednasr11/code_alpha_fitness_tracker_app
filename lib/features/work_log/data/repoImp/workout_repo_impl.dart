@@ -5,14 +5,12 @@ import '../../models/workout_session_model.dart';
 import '../../models/workout_set_model.dart';
 import '../datasources/workout_local_datasource.dart';
 
-
 class WorkoutRepositoryImpl implements WorkoutRepository {
   final WorkoutLocalDatasource _datasource;
   WorkoutRepositoryImpl(this._datasource);
 
   @override
-  Future<List<WorkoutSession>> getAllSessions() =>
-      _datasource.getAllSessions();
+  Future<List<WorkoutSession>> getAllSessions() => _datasource.getAllSessions();
 
   @override
   Future<WorkoutSession> createSession(WorkoutSession session) =>

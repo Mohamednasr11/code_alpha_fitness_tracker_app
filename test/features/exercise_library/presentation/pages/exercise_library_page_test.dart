@@ -7,7 +7,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockExerciseCubit extends MockCubit<ExerciseState> implements ExerciseCubit {}
+class MockExerciseCubit extends MockCubit<ExerciseState>
+    implements ExerciseCubit {}
 
 void main() {
   late MockExerciseCubit mockExerciseCubit;
@@ -28,7 +29,8 @@ void main() {
     );
   }
 
-  testWidgets('renders ExerciseLibraryPage and loads exercises', (WidgetTester tester) async {
+  testWidgets('renders ExerciseLibraryPage and loads exercises',
+      (WidgetTester tester) async {
     when(() => mockExerciseCubit.state).thenReturn(ExerciseInitial());
     when(() => mockExerciseCubit.loadExercises()).thenAnswer((_) async {});
 

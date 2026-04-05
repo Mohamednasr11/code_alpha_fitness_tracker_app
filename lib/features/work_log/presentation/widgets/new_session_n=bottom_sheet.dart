@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/animations_helper/app_animation.dart';
 
 class NewSessionBottomSheet extends StatefulWidget {
   final Function(String name) onCreateSession;
@@ -18,9 +19,9 @@ class _NewSessionBottomSheetState extends State<NewSessionBottomSheet> {
     'Push Day 💪',
     'Pull Day 🏋️',
     'Leg Day 🦵',
-    'Upper Body',
-    'Lower Body',
-    'Full Body',
+    'Upper Body ⚡',
+    'Lower Body 🔋',
+    'Full Body 🏆',
   ];
 
   @override
@@ -31,6 +32,12 @@ class _NewSessionBottomSheetState extends State<NewSessionBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textPrimary = theme.textTheme.bodyLarge?.color ?? Colors.white;
+    final textSecondary = theme.textTheme.bodyMedium?.color ?? Colors.grey;
+    final cardColor = theme.cardTheme.color ?? AppColors.cardColor;
+    final dividerColor = theme.dividerTheme.color ?? AppColors.divider;
+
     return Padding(
       padding: EdgeInsets.only(
         left: 20,
@@ -50,65 +57,81 @@ class _NewSessionBottomSheetState extends State<NewSessionBottomSheet> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: AppColors.divider,
+                  color: dividerColor,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
             ),
             const SizedBox(height: 20),
-            const Text('New Workout',
-                style: TextStyle(
-                    color: AppColors.textPrimary,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold)),
+            
+            AnimatedListItem(
+              index: 0,
+              child: Text('New Workout',
+                  style: TextStyle(
+                      color: textPrimary,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold)),
+            ),
             const SizedBox(height: 16),
 
             // Quick name chips
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: _quickNames.map((name) {
-                return GestureDetector(
-                  onTap: () => _controller.text = name,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: AppColors.surfaceVariant,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: AppColors.divider),
+            AnimatedListItem(
+              index: 1,
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: _quickNames.map((name) {
+                  return GestureDetector(
+                    onTap: () => _controller.text = name,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: cardColor,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: dividerColor),
+                      ),
+                      child: Text(name,
+                          style: TextStyle(
+                              color: textSecondary, fontSize: 13)),
                     ),
-                    child: Text(name,
-                        style: const TextStyle(
-                            color: AppColors.textSecondary, fontSize: 13)),
-                  ),
-                );
-              }).toList(),
+                  );
+                }).toList(),
+              ),
             ),
             const SizedBox(height: 16),
 
             // Name field
-            TextFormField(
-              controller: _controller,
-              style: const TextStyle(color: AppColors.textPrimary),
-              autofocus: true,
-              decoration: const InputDecoration(
-                hintText: 'Workout name...',
-                prefixIcon:
-                Icon(Iconsax.edit, color: AppColors.textHint, size: 20),
+            AnimatedListItem(
+              index: 2,
+              child: TextFormField(
+                controller: _controller,
+                style: TextStyle(color: textPrimary),
+                autofocus: true,
+                decoration: InputDecoration(
+                  hintText: 'Workout name...',
+                  prefixIcon:
+                      Icon(Iconsax.edit, color: theme.hintColor, size: 20),
+                ),
+                validator: (v) =>
+                    v == null || v.trim().isEmpty ? 'Enter a name' : null,
               ),
-              validator: (v) =>
-              v == null || v.trim().isEmpty ? 'Enter a name' : null,
             ),
             const SizedBox(height: 16),
 
-            ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  widget.onCreateSession(_controller.text.trim());
-                }
-              },
-              child: const Text('Start Workout'),
+            AnimatedListItem(
+              index: 3,
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      widget.onCreateSession(_controller.text.trim());
+                    }
+                  },
+                  child: const Text('Start Workout'),
+                ),
+              ),
             ),
           ],
         ),

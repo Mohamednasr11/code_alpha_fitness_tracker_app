@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
-
-import 'core/di/service_locator.dart';
 import 'core/theme/app_colors.dart';
-import 'features/work_generator/presentation/cubits/generator_cubit.dart';
+import 'core/animations_helper/app_animation.dart';
 import 'features/work_generator/presentation/pages/workout_generator_page.dart';
-import 'features/work_log/presentation/cubits/workout_cubit.dart';
 import 'features/work_log/presentation/pages/home_page.dart';
-import 'features/work_progress/presentation/cubits/progress_cubit.dart';
 import 'features/work_progress/presentation/pages/progress_page.dart';
-
+import 'features/profile_page.dart';
 
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
@@ -26,48 +21,83 @@ class _MainShellState extends State<MainShell> {
     HomePage(),
     ProgressPage(),
     WorkoutGeneratorPage(),
+    ProfilePage(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => sl<WorkoutCubit>()..loadSessions()),
-        BlocProvider(create: (_) => sl<ProgressCubit>()),
-        BlocProvider(create: (_) => sl<GeneratorCubit>()),
-      ],
-      child: Scaffold(
-        body: IndexedStack(index: _currentIndex, children: _pages),
-        bottomNavigationBar: _buildBottomNav(),
+    final theme = Theme.of(context);
+    final dividerColor = theme.dividerTheme.color ?? AppColors.divider;
+
+    return Scaffold(
+      body: PageTransitionSwitcher(
+        index: _currentIndex,
+        child: _pages[_currentIndex],
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: dividerColor, width: 1)),
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: (index) => setState(() => _currentIndex = index),
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Iconsax.home),
+              activeIcon: Icon(Iconsax.home_15),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Iconsax.chart),
+              activeIcon: Icon(Iconsax.chart_15),
+              label: 'Progress',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Iconsax.magic_star),
+              activeIcon: Icon(Iconsax.magic_star5),
+              label: 'Generate',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Iconsax.user),
+              activeIcon: Icon(Iconsax.user),
+              label: 'Profile',
+            ),
+          ],
+        ),
       ),
     );
   }
+}
 
-  Widget _buildBottomNav() {
-    return Container(
-      decoration: const BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.divider, width: 1)),
-      ),
-      child: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) => setState(() => _currentIndex = index),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Iconsax.home),
-            activeIcon: Icon(Iconsax.home_15),
-            label: 'Home',
+class PageTransitionSwitcher extends StatelessWidget {
+  final int index;
+  final Widget child;
+
+  const PageTransitionSwitcher({
+    super.key,
+    required this.index,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 300),
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return FadeTransition(
+          opacity: animation,
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0.02, 0),
+              end: Offset.zero,
+            ).animate(animation),
+            child: child,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Iconsax.chart),
-            activeIcon: Icon(Iconsax.chart_15),
-            label: 'Progress',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Iconsax.magic_star),
-            activeIcon: Icon(Iconsax.magic_star5),
-            label: 'Generate',
-          ),
-        ],
+        );
+      },
+      child: Container(
+        key: ValueKey<int>(index),
+        child: child,
       ),
     );
   }

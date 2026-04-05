@@ -6,7 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockWorkoutCubit extends MockCubit<WorkoutState> implements WorkoutCubit {}
+class MockWorkoutCubit extends MockCubit<WorkoutState>
+    implements WorkoutCubit {}
 
 void main() {
   late MockWorkoutCubit mockWorkoutCubit;

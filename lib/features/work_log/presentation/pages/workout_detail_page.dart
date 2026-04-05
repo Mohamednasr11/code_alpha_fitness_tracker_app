@@ -8,6 +8,7 @@ import '../../domain/entities/workout_session.dart';
 import '../cubits/workout_cubit.dart';
 import '../widgets/add_set_bottom_sheet.dart';
 import '../widgets/set_title.dart';
+import '../../../../core/animations_helper/app_animation.dart';
 
 class WorkoutDetailPage extends StatelessWidget {
   final WorkoutSession? session;
@@ -21,6 +22,10 @@ class WorkoutDetailPage extends StatelessWidget {
         body: Center(child: Text('Session not found')),
       );
     }
+
+    final theme = Theme.of(context);
+    final textPrimary = theme.textTheme.bodyLarge?.color ?? Colors.white;
+    final textSecondary = theme.textTheme.bodyMedium?.color ?? Colors.grey;
 
     return BlocBuilder<WorkoutCubit, WorkoutState>(
       builder: (context, state) {
@@ -54,12 +59,12 @@ class WorkoutDetailPage extends StatelessWidget {
             ],
           ),
           body: current.sets.isEmpty
-              ? _buildEmpty(context, current)
-              : _buildSetList(context, current, grouped),
+              ? _buildEmpty(context, current, textPrimary, textSecondary)
+              : _buildSetList(context, current, grouped, textPrimary, textSecondary),
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () => _showAddSetSheet(context, current),
-            backgroundColor: AppColors.primary,
-            foregroundColor: AppColors.background,
+            backgroundColor: theme.colorScheme.primary,
+            foregroundColor: theme.colorScheme.onPrimary,
             icon: const Icon(Iconsax.add),
             label: const Text('Add Set',
                 style: TextStyle(fontWeight: FontWeight.bold)),
@@ -69,21 +74,21 @@ class WorkoutDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildEmpty(BuildContext context, WorkoutSession session) {
+  Widget _buildEmpty(BuildContext context, WorkoutSession session, Color textPrimary, Color textSecondary) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Iconsax.activity, size: 64, color: AppColors.textHint),
+          Icon(Iconsax.activity, size: 64, color: textSecondary.withOpacity(0.3)),
           const SizedBox(height: 16),
-          const Text('No sets logged yet',
+          Text('No sets logged yet',
               style: TextStyle(
-                  color: AppColors.textPrimary,
+                  color: textPrimary,
                   fontSize: 18,
                   fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
-          const Text('Tap "Add Set" to log your first exercise',
-              style: TextStyle(color: AppColors.textSecondary)),
+          Text('Tap "Add Set" to log your first exercise',
+              style: TextStyle(color: textSecondary)),
           const SizedBox(height: 24),
           ElevatedButton.icon(
             onPressed: () => _showAddSetSheet(context, session),
@@ -99,100 +104,128 @@ class WorkoutDetailPage extends StatelessWidget {
     BuildContext context,
     WorkoutSession session,
     Map<String, List<dynamic>> grouped,
+    Color textPrimary,
+    Color textSecondary,
   ) {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
       children: [
         // Session stats header
-        _buildStatsRow(session),
+        _buildStatsRow(context, session),
         const SizedBox(height: 20),
 
         // Sets grouped by exercise
-        ...grouped.entries.map((entry) {
-          final sets = entry.value;
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Text(
-                  entry.key,
-                  style: const TextStyle(
-                    color: AppColors.primary,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
+        ...grouped.entries.toList().asMap().entries.map((entry) {
+          final exerciseIndex = entry.key;
+          final exerciseName = entry.value.key;
+          final sets = entry.value.value;
+          
+          return AnimatedListItem(
+            index: exerciseIndex + 1, // +1 because stats row is index 0
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Text(
+                    exerciseName,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              // Header row
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4),
-                child: Row(
-                  children: [
-                    SizedBox(
-                        width: 40,
-                        child: Text('SET',
-                            style: TextStyle(
-                                color: AppColors.textHint, fontSize: 11))),
-                    Expanded(
-                        child: Text('REPS',
-                            style: TextStyle(
-                                color: AppColors.textHint, fontSize: 11))),
-                    Expanded(
-                        child: Text('WEIGHT (kg)',
-                            style: TextStyle(
-                                color: AppColors.textHint, fontSize: 11))),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 45,
+                        child: Text(
+                          'SET',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: textSecondary.withOpacity(0.5), fontSize: 11),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+
+                      Expanded(
+                        child: Text(
+                          'REPS',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              color: textSecondary.withOpacity(0.5), fontSize: 11),
+                        ),
+                      ),
+
+                      Expanded(
+                        child: Text(
+                          'WEIGHT (kg)',
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                              color: textSecondary.withOpacity(0.5), fontSize: 11),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 4),
-              ...sets.map((s) => SetTile(set: s)),
-              const SizedBox(height: 16),
-            ],
+                const SizedBox(height: 8),
+                ...sets.map((s) => SetTile(set: s)),
+                const SizedBox(height: 16),
+              ],
+            ),
           );
         }),
       ],
     );
   }
 
-  Widget _buildStatsRow(WorkoutSession session) {
+  Widget _buildStatsRow(BuildContext context, WorkoutSession session) {
     final totalVolume =
         session.sets.fold<double>(0, (sum, s) => sum + (s.reps * s.weight));
     final exercises = session.sets.map((s) => s.exercise.name).toSet().length;
 
-    return Row(
-      children: [
-        _statChip(Iconsax.activity, '${session.sets.length}', 'Sets'),
-        const SizedBox(width: 12),
-        _statChip(Iconsax.weight, '$exercises', 'Exercises'),
-        const SizedBox(width: 12),
-        _statChip(
-            Iconsax.chart_21, '${totalVolume.toStringAsFixed(0)} kg', 'Volume'),
-      ],
+    return AnimatedListItem(
+      index: 0,
+      child: Row(
+        children: [
+          _statChip(context, Iconsax.activity, session.sets.length.toDouble(), 'Sets'),
+          const SizedBox(width: 12),
+          _statChip(context, Iconsax.weight, exercises.toDouble(), 'Exercises'),
+          const SizedBox(width: 12),
+          _statChip(context, Iconsax.chart_21, totalVolume, 'Volume', isWeight: true),
+        ],
+      ),
     );
   }
 
-  Widget _statChip(IconData icon, String value, String label) {
+  Widget _statChip(BuildContext context, IconData icon, double value, String label, {bool isWeight = false}) {
+    final theme = Theme.of(context);
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: AppColors.cardColor,
+          color: theme.cardTheme.color,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.divider),
+          border: Border.all(color: theme.dividerTheme.color ?? Colors.transparent),
         ),
         child: Column(
           children: [
-            Icon(icon, color: AppColors.primary, size: 18),
+            Icon(icon, color: theme.colorScheme.primary, size: 18),
             const SizedBox(height: 4),
-            Text(value,
-                style: const TextStyle(
-                    color: AppColors.textPrimary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14)),
+            AnimatedCounter(
+              value: value,
+              suffix: isWeight ? ' kg' : '',
+              style: TextStyle(
+                  color: theme.textTheme.bodyLarge?.color,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14),
+            ),
             Text(label,
-                style: const TextStyle(
-                    color: AppColors.textSecondary, fontSize: 11)),
+                style: TextStyle(
+                    color: theme.textTheme.bodyMedium?.color, fontSize: 11)),
           ],
         ),
       ),
@@ -203,7 +236,7 @@ class WorkoutDetailPage extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),

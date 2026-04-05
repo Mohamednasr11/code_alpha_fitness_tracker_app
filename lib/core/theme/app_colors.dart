@@ -17,7 +17,6 @@ class AppColors {
   static const Color warning = Color(0xFFFF9800);
   static const Color divider = Color(0xFF2A2A2A);
 
-  // Muscle group colors
   static const Color chest = Color(0xFFEF5350);
   static const Color back = Color(0xFF42A5F5);
   static const Color legs = Color(0xFFAB47BC);

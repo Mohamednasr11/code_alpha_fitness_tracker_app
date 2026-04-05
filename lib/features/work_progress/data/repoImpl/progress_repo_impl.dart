@@ -1,5 +1,3 @@
-
-
 import '../../domain/entities/models/exercise_progress.dart';
 import '../../domain/repos/progress_repo.dart';
 import '../progress_local_datasource.dart';

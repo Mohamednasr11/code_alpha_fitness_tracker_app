@@ -18,9 +18,10 @@ class SetTile extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(
-            width: 40,
+            width: 45,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: AppColors.primary.withOpacity(0.15),
                 borderRadius: BorderRadius.circular(4),
@@ -35,18 +36,23 @@ class SetTile extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(width: 16),
+
           Expanded(
             child: Text(
               '${set.reps} reps',
-              style: const TextStyle(
-                  color: AppColors.textPrimary, fontSize: 14),
+              textAlign: TextAlign.left,
+              style:
+              const TextStyle(color: AppColors.textPrimary, fontSize: 14),
             ),
           ),
+
           Expanded(
             child: Text(
               '${set.weight} kg',
-              style: const TextStyle(
-                  color: AppColors.textPrimary, fontSize: 14),
+              textAlign: TextAlign.right,
+              style:
+              const TextStyle(color: AppColors.textPrimary, fontSize: 14),
             ),
           ),
         ],

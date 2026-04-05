@@ -1,4 +1,3 @@
-
 import '../../domain/generated_workout.dart';
 
 class GenerateWorkoutUsecase {
@@ -19,10 +18,8 @@ class GenerateWorkoutUsecase {
     }
   }
 
-  // ── Split selection based on goal + days ─────────────────
   List<_DaySpec> _getSplit(FitnessGoal goal, int days) {
     if (days == 3) {
-      // Full body 3x
       return [
         _DaySpec('Day 1', 'Full Body A', ['Chest', 'Back', 'Legs']),
         _DaySpec('Day 2', 'Full Body B', ['Shoulders', 'Arms', 'Core']),
@@ -30,7 +27,6 @@ class GenerateWorkoutUsecase {
       ];
     }
     if (days == 4) {
-      // Upper / Lower split
       return [
         _DaySpec('Day 1', 'Upper Body', ['Chest', 'Back', 'Shoulders']),
         _DaySpec('Day 2', 'Lower Body', ['Legs', 'Core']),
@@ -38,7 +34,7 @@ class GenerateWorkoutUsecase {
         _DaySpec('Day 4', 'Lower Body', ['Legs', 'Shoulders', 'Core']),
       ];
     }
-    // 5 days — Push / Pull / Legs / Upper / Core
+
     return [
       _DaySpec('Day 1', 'Push', ['Chest', 'Shoulders', 'Arms']),
       _DaySpec('Day 2', 'Pull', ['Back', 'Arms']),
@@ -48,7 +44,6 @@ class GenerateWorkoutUsecase {
     ];
   }
 
-  // ── Build a single day ────────────────────────────────────
   GeneratedWorkoutDay _buildDay(_DaySpec spec, GeneratorInput input) {
     final exercises = <GeneratedExercise>[];
 
@@ -57,12 +52,12 @@ class GenerateWorkoutUsecase {
       final count = _exercisesPerGroup(input.level);
       exercises.addAll(
         pool.take(count).map((name) => GeneratedExercise(
-          name: name,
-          muscleGroup: group,
-          sets: _sets(input),
-          reps: _reps(input),
-          rest: _rest(input),
-        )),
+              name: name,
+              muscleGroup: group,
+              sets: _sets(input),
+              reps: _reps(input),
+              rest: _rest(input),
+            )),
       );
     }
 
@@ -73,7 +68,6 @@ class GenerateWorkoutUsecase {
     );
   }
 
-  // ── Parameters by level & goal ────────────────────────────
   int _exercisesPerGroup(FitnessLevel level) {
     switch (level) {
       case FitnessLevel.beginner:
@@ -119,29 +113,52 @@ class GenerateWorkoutUsecase {
     }
   }
 
-  // ── Exercise pool per muscle group ────────────────────────
   static const _exercisePool = <String, List<String>>{
     'Chest': [
-      'Bench Press', 'Incline Bench Press', 'Dumbbell Fly', 'Push Up', 'Cable Crossover'
+      'Bench Press',
+      'Incline Bench Press',
+      'Dumbbell Fly',
+      'Push Up',
+      'Cable Crossover'
     ],
     'Back': [
-      'Deadlift', 'Pull Up', 'Barbell Row', 'Lat Pulldown', 'Seated Cable Row'
+      'Deadlift',
+      'Pull Up',
+      'Barbell Row',
+      'Lat Pulldown',
+      'Seated Cable Row'
     ],
     'Legs': [
-      'Squat', 'Leg Press', 'Romanian Deadlift', 'Leg Curl', 'Leg Extension', 'Calf Raise', 'Lunge'
+      'Squat',
+      'Leg Press',
+      'Romanian Deadlift',
+      'Leg Curl',
+      'Leg Extension',
+      'Calf Raise',
+      'Lunge'
     ],
     'Shoulders': [
-      'Overhead Press', 'Lateral Raise', 'Front Raise', 'Face Pull', 'Arnold Press'
+      'Overhead Press',
+      'Lateral Raise',
+      'Front Raise',
+      'Face Pull',
+      'Arnold Press'
     ],
     'Arms': [
-      'Barbell Curl', 'Hammer Curl', 'Tricep Pushdown', 'Skull Crusher', 'Dips'
+      'Barbell Curl',
+      'Hammer Curl',
+      'Tricep Pushdown',
+      'Skull Crusher',
+      'Dips'
     ],
     'Core': [
-      'Plank', 'Crunch', 'Leg Raise', 'Russian Twist', 'Ab Wheel Rollout'
+      'Plank',
+      'Crunch',
+      'Leg Raise',
+      'Russian Twist',
+      'Ab Wheel Rollout'
     ],
-    'Cardio': [
-      'Running', 'Cycling', 'Jump Rope', 'Rowing Machine'
-    ],
+    'Cardio': ['Running', 'Cycling', 'Jump Rope', 'Rowing Machine'],
   };
 }
 

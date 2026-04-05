@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/animations_helper/app_animation.dart';
 import '../cubit/exercise_cubit.dart';
 import '../widgets/exercise_card.dart';
 import '../widgets/muscle_group_filter.dart';
@@ -38,6 +39,11 @@ class _ExerciseLibraryViewState extends State<_ExerciseLibraryView> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textPrimary = theme.textTheme.bodyLarge?.color ?? Colors.black;
+    final textSecondary = theme.textTheme.bodyMedium?.color ?? Colors.grey;
+    final primaryColor = theme.colorScheme.primary;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Exercise Library'),
@@ -49,27 +55,30 @@ class _ExerciseLibraryViewState extends State<_ExerciseLibraryView> {
       body: Column(
         children: [
           // Search bar
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-            child: TextField(
-              controller: _searchController,
-              onChanged: (q) =>
-                  context.read<ExerciseCubit>().search(q),
-              style: const TextStyle(color: AppColors.textPrimary),
-              decoration: InputDecoration(
-                hintText: 'Search exercises...',
-                prefixIcon: const Icon(Iconsax.search_normal,
-                    color: AppColors.textHint, size: 20),
-                suffixIcon: _searchController.text.isNotEmpty
-                    ? IconButton(
-                  icon: const Icon(Iconsax.close_circle,
-                      color: AppColors.textHint, size: 20),
-                  onPressed: () {
-                    _searchController.clear();
-                    context.read<ExerciseCubit>().search('');
-                  },
-                )
-                    : null,
+          AnimatedListItem(
+            index: 0,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              child: TextField(
+                controller: _searchController,
+                onChanged: (q) => context.read<ExerciseCubit>().search(q),
+                style: TextStyle(color: textPrimary),
+                decoration: InputDecoration(
+                  hintText: 'Search exercises...',
+                  hintStyle: TextStyle(color: theme.hintColor),
+                  prefixIcon: Icon(Iconsax.search_normal,
+                      color: theme.hintColor, size: 20),
+                  suffixIcon: _searchController.text.isNotEmpty
+                      ? IconButton(
+                          icon: Icon(Iconsax.close_circle,
+                              color: theme.hintColor, size: 20),
+                          onPressed: () {
+                            _searchController.clear();
+                            context.read<ExerciseCubit>().search('');
+                          },
+                        )
+                      : null,
+                ),
               ),
             ),
           ),
@@ -80,10 +89,13 @@ class _ExerciseLibraryViewState extends State<_ExerciseLibraryView> {
           BlocBuilder<ExerciseCubit, ExerciseState>(
             builder: (context, state) {
               if (state is! ExerciseLoaded) return const SizedBox();
-              return MuscleGroupFilter(
-                selected: state.selectedMuscleGroup,
-                onSelected: (group) =>
-                    context.read<ExerciseCubit>().filterByMuscleGroup(group),
+              return AnimatedListItem(
+                index: 1,
+                child: MuscleGroupFilter(
+                  selected: state.selectedMuscleGroup,
+                  onSelected: (group) =>
+                      context.read<ExerciseCubit>().filterByMuscleGroup(group),
+                ),
               );
             },
           ),
@@ -95,31 +107,29 @@ class _ExerciseLibraryViewState extends State<_ExerciseLibraryView> {
             child: BlocBuilder<ExerciseCubit, ExerciseState>(
               builder: (context, state) {
                 if (state is ExerciseLoading) {
-                  return const Center(
-                      child: CircularProgressIndicator(
-                          color: AppColors.primary));
+                  return Center(
+                      child: CircularProgressIndicator(color: primaryColor));
                 }
                 if (state is ExerciseError) {
                   return Center(
                       child: Text(state.message,
-                          style: const TextStyle(
-                              color: AppColors.error)));
+                          style: const TextStyle(color: AppColors.error)));
                 }
                 if (state is ExerciseLoaded) {
                   if (state.filtered.isEmpty) {
-                    return const Center(
+                    return Center(
                       child: Text('No exercises found',
-                          style:
-                          TextStyle(color: AppColors.textSecondary)),
+                          style: TextStyle(color: textSecondary)),
                     );
                   }
                   return ListView.separated(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                     itemCount: state.filtered.length,
-                    separatorBuilder: (_, __) =>
-                    const SizedBox(height: 8),
-                    itemBuilder: (_, i) =>
-                        ExerciseCard(exercise: state.filtered[i]),
+                    separatorBuilder: (_, __) => const SizedBox(height: 8),
+                    itemBuilder: (_, i) => AnimatedListItem(
+                      index: i + 2, // offset for top items
+                      child: ExerciseCard(exercise: state.filtered[i]),
+                    ),
                   );
                 }
                 return const SizedBox();

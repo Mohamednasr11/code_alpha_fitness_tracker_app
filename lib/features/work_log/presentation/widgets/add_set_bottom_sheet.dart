@@ -10,9 +10,9 @@ import '../../domain/entities/workout_session.dart';
 class AddSetBottomSheet extends StatefulWidget {
   final WorkoutSession session;
   final Function({
-  required Exercise exercise,
-  required int reps,
-  required double weight,
+    required Exercise exercise,
+    required int reps,
+    required double weight,
   }) onAddSet;
 
   const AddSetBottomSheet({
@@ -40,6 +40,10 @@ class _AddSetBottomSheetState extends State<AddSetBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textPrimary = theme.textTheme.bodyLarge?.color ?? Colors.black;
+    final dividerColor = theme.dividerTheme.color ?? Colors.grey.withOpacity(0.2);
+
     return BlocProvider(
       create: (_) => sl<ExerciseCubit>()..loadExercises(),
       child: Padding(
@@ -55,71 +59,61 @@ class _AddSetBottomSheetState extends State<AddSetBottomSheet> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Handle
               Center(
                 child: Container(
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: AppColors.divider,
+                    color: dividerColor,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
               ),
               const SizedBox(height: 20),
-              const Text('Log Set',
+              Text('Log Set',
                   style: TextStyle(
-                      color: AppColors.textPrimary,
+                      color: textPrimary,
                       fontSize: 20,
                       fontWeight: FontWeight.bold)),
               const SizedBox(height: 16),
-
-              // Exercise dropdown
+              
               BlocBuilder<ExerciseCubit, ExerciseState>(
                 builder: (context, state) {
-                  final exercises =
-                  state is ExerciseLoaded ? state.exercises : <Exercise>[];
+                  final exercises = state is ExerciseLoaded ? state.exercises : <Exercise>[];
                   return DropdownButtonFormField<Exercise>(
                     value: _selectedExercise,
-                    dropdownColor: AppColors.surface,
-                    style: const TextStyle(color: AppColors.textPrimary),
-                    decoration: const InputDecoration(
+                    dropdownColor: theme.cardTheme.color,
+                    style: TextStyle(color: textPrimary),
+                    decoration: InputDecoration(
                       hintText: 'Select exercise',
-                      prefixIcon: Icon(Iconsax.weight,
-                          color: AppColors.textHint, size: 20),
+                      hintStyle: TextStyle(color: theme.hintColor),
+                      prefixIcon: Icon(Iconsax.weight, color: theme.hintColor, size: 20),
                     ),
-                    items: exercises
-                        .map((e) => DropdownMenuItem(
+                    items: exercises.map((e) => DropdownMenuItem(
                       value: e,
-                      child: Text('${e.name} (${e.muscleGroup})',
-                          style: const TextStyle(fontSize: 14)),
-                    ))
-                        .toList(),
+                      child: Text('${e.name} (${e.muscleGroup})', style: const TextStyle(fontSize: 14)),
+                    )).toList(),
                     onChanged: (e) => setState(() => _selectedExercise = e),
-                    validator: (v) =>
-                    v == null ? 'Select an exercise' : null,
+                    validator: (v) => v == null ? 'Select an exercise' : null,
                   );
                 },
               ),
               const SizedBox(height: 12),
-
-              // Reps & Weight row
               Row(
                 children: [
                   Expanded(
                     child: TextFormField(
                       controller: _repsController,
-                      style:
-                      const TextStyle(color: AppColors.textPrimary),
+                      style: TextStyle(color: textPrimary),
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Reps',
-                        prefixIcon: Icon(Iconsax.repeat,
-                            color: AppColors.textHint, size: 20),
+                        labelStyle: TextStyle(color: theme.hintColor),
+                        prefixIcon: Icon(Iconsax.repeat, color: theme.hintColor, size: 20),
                       ),
                       validator: (v) {
                         final n = int.tryParse(v ?? '');
-                        if (n == null || n <= 0) return 'Enter valid reps';
+                        if (n == null || n <= 0) return 'Required';
                         return null;
                       },
                     ),
@@ -128,37 +122,37 @@ class _AddSetBottomSheetState extends State<AddSetBottomSheet> {
                   Expanded(
                     child: TextFormField(
                       controller: _weightController,
-                      style:
-                      const TextStyle(color: AppColors.textPrimary),
-                      keyboardType: const TextInputType.numberWithOptions(
-                          decimal: true),
-                      decoration: const InputDecoration(
+                      style: TextStyle(color: textPrimary),
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      decoration: InputDecoration(
                         labelText: 'Weight (kg)',
-                        prefixIcon: Icon(Iconsax.weight_1,
-                            color: AppColors.textHint, size: 20),
+                        labelStyle: TextStyle(color: theme.hintColor),
+                        prefixIcon: Icon(Iconsax.weight_1, color: theme.hintColor, size: 20),
                       ),
                       validator: (v) {
                         final n = double.tryParse(v ?? '');
-                        if (n == null || n < 0) return 'Enter valid weight';
+                        if (n == null || n < 0) return 'Required';
                         return null;
                       },
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
-
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    widget.onAddSet(
-                      exercise: _selectedExercise!,
-                      reps: int.parse(_repsController.text),
-                      weight: double.parse(_weightController.text),
-                    );
-                  }
-                },
-                child: const Text('Add Set'),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      widget.onAddSet(
+                        exercise: _selectedExercise!,
+                        reps: int.parse(_repsController.text),
+                        weight: double.parse(_weightController.text),
+                      );
+                    }
+                  },
+                  child: const Text('Add Set'),
+                ),
               ),
             ],
           ),

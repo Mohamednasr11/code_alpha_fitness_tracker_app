@@ -24,11 +24,9 @@ class ProgressLocalDatasourceImpl implements ProgressLocalDatasource {
   }
 
   @override
-  Future<ExerciseProgress> getProgressForExercise(
-      String exerciseName) async {
+  Future<ExerciseProgress> getProgressForExercise(String exerciseName) async {
     final db = await _db.database;
 
-    // Get per-session aggregates for this exercise
     final result = await db.rawQuery('''
       SELECT
         s.date,
@@ -59,18 +57,17 @@ class ProgressLocalDatasourceImpl implements ProgressLocalDatasource {
   Future<Map<String, double>> getOverallStats() async {
     final db = await _db.database;
 
-    final totalSessions = (await db.rawQuery(
-        'SELECT COUNT(*) as c FROM workout_sessions'))
-        .first['c'] as int;
+    final totalSessions =
+        (await db.rawQuery('SELECT COUNT(*) as c FROM workout_sessions'))
+            .first['c'] as int;
 
     final totalSets =
-    (await db.rawQuery('SELECT COUNT(*) as c FROM workout_sets'))
-        .first['c'] as int;
+        (await db.rawQuery('SELECT COUNT(*) as c FROM workout_sets')).first['c']
+            as int;
 
-    final volumeResult = await db.rawQuery(
-        'SELECT SUM(reps * weight) as v FROM workout_sets');
-    final totalVolume =
-        (volumeResult.first['v'] as num?)?.toDouble() ?? 0.0;
+    final volumeResult =
+        await db.rawQuery('SELECT SUM(reps * weight) as v FROM workout_sets');
+    final totalVolume = (volumeResult.first['v'] as num?)?.toDouble() ?? 0.0;
 
     final exercisesResult = await db.rawQuery('''
       SELECT COUNT(DISTINCT exercise_id) as c FROM workout_sets

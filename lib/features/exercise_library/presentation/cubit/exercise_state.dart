@@ -1,7 +1,5 @@
 part of 'exercise_cubit.dart';
 
-
-
 abstract class ExerciseState extends Equatable {
   @override
   List<Object?> get props => [];

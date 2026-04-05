@@ -7,7 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockGeneratorCubit extends MockCubit<GeneratorState> implements GeneratorCubit {}
+class MockGeneratorCubit extends MockCubit<GeneratorState>
+    implements GeneratorCubit {}
 
 class FakeGeneratorInput extends Fake implements GeneratorInput {}
 
@@ -31,7 +32,8 @@ void main() {
     );
   }
 
-  testWidgets('renders WorkoutGeneratorPage with initial form', (WidgetTester tester) async {
+  testWidgets('renders WorkoutGeneratorPage with initial form',
+      (WidgetTester tester) async {
     when(() => mockGeneratorCubit.state).thenReturn(GeneratorInitial());
 
     await tester.pumpWidget(createWidgetUnderTest());
@@ -48,7 +50,8 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 
-  testWidgets('renders results when state is GeneratorLoaded', (WidgetTester tester) async {
+  testWidgets('renders results when state is GeneratorLoaded',
+      (WidgetTester tester) async {
     const input = GeneratorInput(
       goal: FitnessGoal.buildMuscle,
       level: FitnessLevel.beginner,
@@ -76,25 +79,23 @@ void main() {
 
     await tester.pumpWidget(createWidgetUnderTest());
 
-    expect(find.text('💪 Build Muscle Plan'), findsOneWidget);
+    expect(find.text('ظ‹ع؛â€™ع¾ Build Muscle Plan'), findsOneWidget);
     expect(find.text('Day 1'), findsOneWidget);
-    
-    // The exercises are inside an ExpansionTile (which uses a ListView/Column inside).
-    // We need to expand it or look for the text. 
-    // ExpansionTile is collapsed by default.
+
     await tester.tap(find.text('Day 1'));
     await tester.pumpAndSettle();
 
     expect(find.text('Push Up'), findsOneWidget);
   });
 
-  testWidgets('calls generate on cubit when button is pressed', (WidgetTester tester) async {
+  testWidgets('calls generate on cubit when button is pressed',
+      (WidgetTester tester) async {
     when(() => mockGeneratorCubit.state).thenReturn(GeneratorInitial());
 
     await tester.pumpWidget(createWidgetUnderTest());
 
     await tester.tap(find.text('Generate Plan'));
-    
+
     verify(() => mockGeneratorCubit.generate(any())).called(1);
   });
 }

@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/di/service_locator.dart';
 import 'core/routing/app_routing.dart';
 import 'core/theme/app_theme.dart';
+import 'core/theme/cubit/theme_cubit.dart';
 import 'features/work_generator/presentation/cubits/generator_cubit.dart';
 import 'features/work_log/presentation/cubits/workout_cubit.dart';
 import 'features/work_progress/presentation/cubits/progress_cubit.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,13 +25,22 @@ class FitnessTrackerApp extends StatelessWidget {
         BlocProvider(create: (_) => sl<WorkoutCubit>()..loadSessions()),
         BlocProvider(create: (_) => sl<ProgressCubit>()),
         BlocProvider(create: (_) => sl<GeneratorCubit>()),
+        BlocProvider(create: (_) => sl<ThemeCubit>()), // تأكد من تسجيله في الـ DI
       ],
-      child: MaterialApp(
-        title: 'Fitness Tracker',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.darkTheme,
-        onGenerateRoute: AppRouter.onGenerateRoute,
-        initialRoute: AppRouter.home,
+      child: BlocBuilder<ThemeCubit, ThemeMode>(
+        builder: (context, themeMode) {
+          return MaterialApp(
+            title: 'Fitness Tracker',
+            debugShowCheckedModeBanner: false,
+            // بنعرف الـ Themes هنا
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            // بنستخدم الـ themeMode اللي جاي من الـ Cubit مباشرة
+            themeMode: themeMode,
+            onGenerateRoute: AppRouter.onGenerateRoute,
+            initialRoute: AppRouter.home,
+          );
+        },
       ),
     );
   }

@@ -20,57 +20,52 @@ import '../../features/work_progress/domain/repos/progress_repo.dart';
 import '../../features/work_progress/domain/usecases/get_progress_usecase.dart';
 import '../../features/work_progress/presentation/cubits/progress_cubit.dart';
 import '../database/database_helper.dart';
-
+import '../theme/cubit/theme_cubit.dart';
 
 final sl = GetIt.instance;
 
 Future<void> initDependencies() async {
-  // Core
   sl.registerSingleton<DatabaseHelper>(DatabaseHelper.instance);
 
-  // ─── Exercise Library ─────────────────────────────────
   sl.registerLazySingleton<ExerciseLocalDatasource>(
-        () => ExerciseLocalDatasourceImpl(sl()),
+    () => ExerciseLocalDatasourceImpl(sl()),
   );
   sl.registerLazySingleton<ExerciseRepository>(
-        () => ExerciseRepositoryImpl(sl()),
+    () => ExerciseRepositoryImpl(sl()),
   );
   sl.registerLazySingleton(() => GetExercisesUsecase(sl()));
   sl.registerFactory(() => ExerciseCubit(sl()));
 
-  // ─── Progress ─────────────────────────────────────────
   sl.registerLazySingleton<ProgressLocalDatasource>(
-        () => ProgressLocalDatasourceImpl(sl()),
+    () => ProgressLocalDatasourceImpl(sl()),
   );
   sl.registerLazySingleton<ProgressRepository>(
-        () => ProgressRepositoryImpl(sl()),
+    () => ProgressRepositoryImpl(sl()),
   );
   sl.registerLazySingleton(() => GetProgressUsecase(sl()));
-  // Register as LazySingleton to share instance
+
   sl.registerLazySingleton(() => ProgressCubit(sl()));
 
-  // ─── Workout Log ──────────────────────────────────────
   sl.registerLazySingleton<WorkoutLocalDatasource>(
-        () => WorkoutLocalDatasourceImpl(sl()),
+    () => WorkoutLocalDatasourceImpl(sl()),
   );
   sl.registerLazySingleton<WorkoutRepository>(
-        () => WorkoutRepositoryImpl(sl()),
+    () => WorkoutRepositoryImpl(sl()),
   );
   sl.registerLazySingleton(() => CreateSessionUsecase(sl()));
   sl.registerLazySingleton(() => AddSetUsecase(sl()));
   sl.registerLazySingleton(() => GetSessionsUsecase(sl()));
   sl.registerLazySingleton(() => DeleteSessionUsecase(sl()));
-  
-  // Register as LazySingleton and inject ProgressCubit
-  sl.registerLazySingleton(() => WorkoutCubit(
-    createSession: sl(),
-    addSet: sl(),
-    getSessions: sl(),
-    deleteSession: sl(),
-    progressCubit: sl<ProgressCubit>(),
-  ));
 
-  // ─── Workout Generator ────────────────────────────────
+  sl.registerLazySingleton(() => WorkoutCubit(
+        createSession: sl(),
+        addSet: sl(),
+        getSessions: sl(),
+        deleteSession: sl(),
+        progressCubit: sl<ProgressCubit>(),
+      ));
+  sl.registerLazySingleton(()=>ThemeCubit());
+
   sl.registerLazySingleton(() => GenerateWorkoutUsecase());
   sl.registerFactory(() => GeneratorCubit(sl()));
 }

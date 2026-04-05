@@ -7,9 +7,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockWorkoutCubit extends MockCubit<WorkoutState> implements WorkoutCubit {}
-class MockProgressCubit extends MockCubit<ProgressState> implements ProgressCubit {}
-class MockGeneratorCubit extends MockCubit<GeneratorState> implements GeneratorCubit {}
+class MockWorkoutCubit extends MockCubit<WorkoutState>
+    implements WorkoutCubit {}
+
+class MockProgressCubit extends MockCubit<ProgressState>
+    implements ProgressCubit {}
+
+class MockGeneratorCubit extends MockCubit<GeneratorState>
+    implements GeneratorCubit {}
 
 void main() {
   late MockWorkoutCubit mockWorkoutCubit;
@@ -22,8 +27,8 @@ void main() {
     mockGeneratorCubit = MockGeneratorCubit();
 
     final sl = GetIt.instance;
-    sl.reset(); // Full reset to avoid "already registered" errors
-    
+    sl.reset();
+
     sl.registerFactory<WorkoutCubit>(() => mockWorkoutCubit);
     sl.registerFactory<ProgressCubit>(() => mockProgressCubit);
     sl.registerFactory<GeneratorCubit>(() => mockGeneratorCubit);
@@ -35,7 +40,8 @@ void main() {
     when(() => mockGeneratorCubit.state).thenReturn(GeneratorInitial());
   });
 
-  testWidgets('App smoke test - renders FitnessTrackerApp', (WidgetTester tester) async {
+  testWidgets('App smoke test - renders FitnessTrackerApp',
+      (WidgetTester tester) async {
     await tester.pumpWidget(const FitnessTrackerApp());
     expect(find.byType(FitnessTrackerApp), findsOneWidget);
   });

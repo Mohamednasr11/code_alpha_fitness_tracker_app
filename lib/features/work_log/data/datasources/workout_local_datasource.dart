@@ -32,8 +32,7 @@ class WorkoutLocalDatasourceImpl implements WorkoutLocalDatasource {
   }
 
   @override
-  Future<WorkoutSessionModel> createSession(
-      WorkoutSessionModel session) async {
+  Future<WorkoutSessionModel> createSession(WorkoutSessionModel session) async {
     final db = await _db.database;
     final id = await db.insert('workout_sessions', session.toMap());
     return WorkoutSessionModel.fromMap({...session.toMap(), 'id': id});

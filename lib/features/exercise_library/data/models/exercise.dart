@@ -9,16 +9,16 @@ class ExerciseModel extends Exercise {
   });
 
   factory ExerciseModel.fromMap(Map<String, dynamic> map) => ExerciseModel(
-    id: map['id'] as int,
-    name: map['name'] as String,
-    muscleGroup: map['muscle_group'] as String,
-    description: map['description'] as String? ?? '',
-  );
+        id: map['id'] as int,
+        name: map['name'] as String,
+        muscleGroup: map['muscle_group'] as String,
+        description: map['description'] as String? ?? '',
+      );
 
   Map<String, dynamic> toMap() => {
-    'id': id,
-    'name': name,
-    'muscle_group': muscleGroup,
-    'description': description,
-  };
+        'id': id,
+        'name': name,
+        'muscle_group': muscleGroup,
+        'description': description,
+      };
 }
