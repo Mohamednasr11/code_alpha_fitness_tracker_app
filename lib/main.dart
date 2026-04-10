@@ -25,17 +25,15 @@ class FitnessTrackerApp extends StatelessWidget {
         BlocProvider(create: (_) => sl<WorkoutCubit>()..loadSessions()),
         BlocProvider(create: (_) => sl<ProgressCubit>()),
         BlocProvider(create: (_) => sl<GeneratorCubit>()),
-        BlocProvider(create: (_) => sl<ThemeCubit>()), // تأكد من تسجيله في الـ DI
+        BlocProvider(create: (_) => sl<ThemeCubit>()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, themeMode) {
           return MaterialApp(
             title: 'Fitness Tracker',
             debugShowCheckedModeBanner: false,
-            // بنعرف الـ Themes هنا
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
-            // بنستخدم الـ themeMode اللي جاي من الـ Cubit مباشرة
             themeMode: themeMode,
             onGenerateRoute: AppRouter.onGenerateRoute,
             initialRoute: AppRouter.home,
