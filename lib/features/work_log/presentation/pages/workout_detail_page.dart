@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import '../../../../core/routing/app_routing.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../exercise_library/domain/entities/exercise.dart';
 import '../../domain/entities/workout_session.dart';
 import '../cubits/workout_cubit.dart';

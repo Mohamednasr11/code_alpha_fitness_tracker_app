@@ -40,6 +40,7 @@ class ProgressLocalDatasourceImpl implements ProgressLocalDatasource {
       GROUP BY s.id
       ORDER BY s.date ASC
     ''', [exerciseName]);
+    print('DEBUG :EXERCISE $exerciseName found in ${result.length} sessions');
 
     final entries = result.map((r) {
       return ProgressEntry(

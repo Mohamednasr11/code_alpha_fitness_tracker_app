@@ -383,7 +383,7 @@ class _StatsRow extends StatelessWidget {
             AnimatedCounter(
               value: value,
               suffix: suffix,
-              style: TextStyle(
+              style: const TextStyle(
                   color: AppColors.primary,
                   fontWeight: FontWeight.bold,
                   fontSize: 15),

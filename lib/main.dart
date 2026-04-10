@@ -1,3 +1,5 @@
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,7 +14,12 @@ import 'features/work_progress/presentation/cubits/progress_cubit.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initDependencies();
-  runApp(const FitnessTrackerApp());
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => const FitnessTrackerApp(),
+    ),
+  );
 }
 
 class FitnessTrackerApp extends StatelessWidget {
@@ -30,6 +37,8 @@ class FitnessTrackerApp extends StatelessWidget {
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, themeMode) {
           return MaterialApp(
+            locale: DevicePreview.locale(context),
+            builder: DevicePreview.appBuilder,
             title: 'Fitness Tracker',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,

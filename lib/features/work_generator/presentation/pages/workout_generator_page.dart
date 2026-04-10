@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../domain/generated_workout.dart';
 import '../cubits/generator_cubit.dart';
 import '../../../../core/animations_helper/app_animation.dart';

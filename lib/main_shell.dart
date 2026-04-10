@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'core/theme/app_colors.dart';
-import 'core/animations_helper/app_animation.dart';
 import 'features/work_generator/presentation/pages/workout_generator_page.dart';
 import 'features/work_log/presentation/pages/home_page.dart';
 import 'features/work_progress/presentation/pages/progress_page.dart';

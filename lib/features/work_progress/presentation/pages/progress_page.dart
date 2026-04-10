@@ -122,7 +122,10 @@ class _ProgressPageState extends State<ProgressPage> {
         ] else if (state.selectedProgress != null) ...[
           AnimatedListItem(
             index: 2,
-            child: _buildSingleEntryNote(textSecondary, theme),
+            child: _buildSingleEntryNote(
+                state.selectedExercise ?? 'this exercise',
+                textSecondary,
+                theme),
           ),
         ],
       ],
@@ -344,15 +347,21 @@ class _ProgressPageState extends State<ProgressPage> {
     );
   }
 
-  Widget _buildSingleEntryNote(Color textSecondary, ThemeData theme) {
+  Widget _buildSingleEntryNote(
+      String exerciseName, Color textSecondary, ThemeData theme) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: (theme.dividerTheme.color ?? Colors.grey).withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(
+          color: (theme.dividerTheme.color ?? Colors.grey).withOpacity(0.1),
+          borderRadius: BorderRadius.circular(12)),
       child: Row(
         children: [
           Icon(Iconsax.info_circle, color: textSecondary, size: 18),
           const SizedBox(width: 10),
-          Expanded(child: Text('Log this exercise in at least 2 sessions to see a progress chart.', style: TextStyle(color: textSecondary, fontSize: 13))),
+          Expanded(
+              child: Text(
+                  'Log "$exerciseName" in at least 2 sessions to see a progress chart.',
+                  style: TextStyle(color: textSecondary, fontSize: 13))),
         ],
       ),
     );

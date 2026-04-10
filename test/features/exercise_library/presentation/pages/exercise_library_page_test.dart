@@ -1,5 +1,4 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:fitness_tracker/core/di/service_locator.dart';
 import 'package:fitness_tracker/features/exercise_library/presentation/cubit/exercise_cubit.dart';
 import 'package:fitness_tracker/features/exercise_library/presentation/pages/exercise_library_page.dart';
 import 'package:flutter/material.dart';
