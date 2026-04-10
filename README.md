@@ -58,21 +58,6 @@
 | ![](assets/demo/home.png) | ![](assets/demo/detail.png) | ![](assets/demo/progress.png) | ![](assets/demo/generator.png) | ![](assets/demo/profile.png) |
 | Session list + FAB | Log sets per exercise | fl_chart + PR card | 3-question form | Theme toggle |
 
-> 📸 Add your own screenshots to `assets/demo/` and replace the placeholders above.
-
----
-
-## 🎬 Demo Video
-
-> Upload your screen recording to GitHub and paste the link below.  
-> **How to upload a video to GitHub README** → see [Upload Guide](#-how-to-upload-a-video-to-github) at the bottom.
-
-<!-- Replace this URL after uploading your video -->
-```
-https://github.com/user-attachments/assets/YOUR-VIDEO-ID-HERE
-```
-
----
 
 ## 🏗️ Architecture
 
