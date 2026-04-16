@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "288605077799",
+    "project_id": "my-cool-chat-app-647e9",
+    "storage_bucket": "my-cool-chat-app-647e9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:288605077799:android:54b8be72e75200bce3e902",
+        "android_client_info": {
+          "package_name": "com.example.chat_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "288605077799-q5gvmrf58ggcjcr43ebd2n33p71dv0e5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chat_app",
+            "certificate_hash": "a7c16652b9a96f54cfd5851f005cded95939f662"
+          }
+        },
+        {
+          "client_id": "288605077799-qr23ud4c8jsq5h1n3bapn1hvg22ulmkb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMdUpj93a7civbvFF-9ana1vHLbD44Da8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "288605077799-qr23ud4c8jsq5h1n3bapn1hvg22ulmkb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "288605077799-9hga5eif7pntlmjcna02mh4iem52cch5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fitness"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:288605077799:android:f8f765d8edf57a09e3e902",
+        "android_client_info": {
+          "package_name": "com.example.fitness"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "288605077799-qr23ud4c8jsq5h1n3bapn1hvg22ulmkb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMdUpj93a7civbvFF-9ana1vHLbD44Da8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "288605077799-qr23ud4c8jsq5h1n3bapn1hvg22ulmkb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "288605077799-9hga5eif7pntlmjcna02mh4iem52cch5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fitness"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
