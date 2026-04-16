@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
+
 import '../core/theme/app_colors.dart';
 import '../core/animations_helper/app_animation.dart';
 import '../core/theme/cubit/theme_cubit.dart';
+import 'auth/presentation/cubit/auth_cubit.dart';
 import 'work_progress/presentation/cubits/progress_cubit.dart';
+import '../core/routing/app_routing.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -17,154 +20,212 @@ class ProfilePage extends StatelessWidget {
     final textSecondary = theme.textTheme.bodyMedium?.color ?? Colors.grey;
     final cardColor = theme.cardTheme.color ?? AppColors.cardColor;
     final dividerColor = theme.dividerTheme.color ?? AppColors.divider;
+    final colorScheme = theme.colorScheme;
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Profile')),
-      body: BlocBuilder<ProgressCubit, ProgressState>(
-        builder: (context, state) {
-          double totalSessions = 0;
-          double totalVolume = 0;
+    return BlocListener<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state is AuthUnauthenticatedState) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            AppRouter.loginScreen,
+            (route) => false,
+          );
+        } else if (state is AuthFailureState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error: ${state.failure.toString()}'),
+              backgroundColor: colorScheme.error,
+            ),
+          );
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Profile')),
+        body: BlocBuilder<ProgressCubit, ProgressState>(
+          builder: (context, state) {
+            double totalSessions = 0;
+            double totalVolume = 0;
 
-          if (state is ProgressLoaded) {
-            totalSessions = state.stats['total_sessions'] ?? 0;
-            totalVolume = state.stats['total_volume'] ?? 0;
-          }
+            if (state is ProgressLoaded) {
+              totalSessions = state.stats['total_sessions'] ?? 0;
+              totalVolume = state.stats['total_volume'] ?? 0;
+            }
 
-          return ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              // ── Avatar section ─────────────────────────────────
-              AnimatedListItem(
-                index: 0,
-                child: Center(
-                  child: Column(
-                    children: [
-                      FloatingWidget(
-                        child: Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: theme.colorScheme.primary, width: 2),
-                          ),
-                          child: CircleAvatar(
-                            radius: 45,
-                            backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
-                            child: ClipOval(
-                              child: Image.asset(
-                                'assets/images/قطه.jpg',
-                                width: 90,
-                                height: 90,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) => 
-                                  Icon(Iconsax.user, size: 40, color: theme.colorScheme.primary),
+            return ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                // ── Avatar section ─────────────────────────────────
+                AnimatedListItem(
+                  index: 0,
+                  child: Center(
+                    child: Column(
+                      children: [
+                        FloatingWidget(
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                  color: theme.colorScheme.primary, width: 2),
+                            ),
+                            child: CircleAvatar(
+                              radius: 45,
+                              backgroundColor: theme.colorScheme.primary
+                                  .withValues(alpha: .1),
+                              child: ClipOval(
+                                child: Image.asset(
+                                  'assets/images/قطه.jpg',
+                                  width: 90,
+                                  height: 90,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Icon(Iconsax.user,
+                                          size: 40,
+                                          color: theme.colorScheme.primary),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        'Mohamed Nasr Eldeen',
-                        style: TextStyle(
-                          color: textPrimary,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                        const SizedBox(height: 12),
+                        Text(
+                          'Fitness Tracker App',
+                          style: TextStyle(
+                            color: textPrimary,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Flutter Developer 💪',
-                        style: TextStyle(color: textSecondary, fontSize: 14),
-                      ),
-                    ],
+                        const SizedBox(height: 4),
+                        Text(
+                          'Flutter CODE ONLY 💪',
+                          style: TextStyle(color: textSecondary, fontSize: 14),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 28),
+                const SizedBox(height: 28),
 
-              // ── Appearance ─────────────────────────────────────
-              AnimatedListItem(
-                index: 1,
-                child: _sectionLabel('Appearance', textSecondary),
-              ),
-              const SizedBox(height: 10),
-              AnimatedListItem(
-                index: 2,
-                child: _ThemeToggleTile(
-                  isDark: isDark,
-                  cardColor: cardColor,
-                  dividerColor: dividerColor,
-                  textPrimary: textPrimary,
-                  textSecondary: textSecondary,
+                // ── Appearance ─────────────────────────────────────
+                AnimatedListItem(
+                  index: 1,
+                  child: _sectionLabel('Appearance', textSecondary),
                 ),
-              ),
-              const SizedBox(height: 24),
+                const SizedBox(height: 10),
+                AnimatedListItem(
+                  index: 2,
+                  child: _ThemeToggleTile(
+                    isDark: isDark,
+                    cardColor: cardColor,
+                    dividerColor: dividerColor,
+                    textPrimary: textPrimary,
+                    textSecondary: textSecondary,
+                  ),
+                ),
+                const SizedBox(height: 24),
 
-              // ── About ──────────────────────────────────────────
-              AnimatedListItem(
-                index: 3,
-                child: _sectionLabel('About', textSecondary),
-              ),
-              const SizedBox(height: 10),
-              AnimatedListItem(
-                index: 4,
-                child: _settingsTile(
-                  icon: Iconsax.info_circle,
-                  label: 'Version',
-                  trailing: Text('1.0.0',
-                      style: TextStyle(color: textSecondary, fontSize: 14)),
-                  cardColor: cardColor,
-                  dividerColor: dividerColor,
-                  textPrimary: textPrimary,
+                // ── About ──────────────────────────────────────────
+                AnimatedListItem(
+                  index: 3,
+                  child: _sectionLabel('About', textSecondary),
                 ),
-              ),
-              const SizedBox(height: 8),
-              AnimatedListItem(
-                index: 5,
-                child: _settingsTile(
-                  icon: Iconsax.code,
-                  label: 'Built with Flutter',
-                  trailing: const Text('💙', style: TextStyle(fontSize: 18)),
-                  cardColor: cardColor,
-                  dividerColor: dividerColor,
-                  textPrimary: textPrimary,
+                const SizedBox(height: 10),
+                AnimatedListItem(
+                  index: 4,
+                  child: _settingsTile(
+                    icon: Iconsax.info_circle,
+                    label: 'Version',
+                    trailing: Text('1.0.0',
+                        style: TextStyle(color: textSecondary, fontSize: 14)),
+                    cardColor: cardColor,
+                    dividerColor: dividerColor,
+                    textPrimary: textPrimary,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              AnimatedListItem(
-                index: 6,
-                child: _settingsTile(
-                  icon: Iconsax.data,
-                  label: 'Storage',
-                  trailing: Text('Local SQLite',
-                      style: TextStyle(color: textSecondary, fontSize: 14)),
-                  cardColor: cardColor,
-                  dividerColor: dividerColor,
-                  textPrimary: textPrimary,
+                const SizedBox(height: 8),
+                AnimatedListItem(
+                  index: 5,
+                  child: _settingsTile(
+                    icon: Iconsax.code,
+                    label: 'Built with Flutter',
+                    trailing: const Text('💙', style: TextStyle(fontSize: 18)),
+                    cardColor: cardColor,
+                    dividerColor: dividerColor,
+                    textPrimary: textPrimary,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 32),
+                const SizedBox(height: 8),
+                AnimatedListItem(
+                  index: 6,
+                  child: _settingsTile(
+                    icon: Iconsax.data,
+                    label: 'Storage',
+                    trailing: Text('Local SQLite',
+                        style: TextStyle(color: textSecondary, fontSize: 14)),
+                    cardColor: cardColor,
+                    dividerColor: dividerColor,
+                    textPrimary: textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 8),
 
-              // ── Stats summary ──────────────────────────────────
-              AnimatedListItem(
-                index: 7,
-                child: _sectionLabel('Quick Stats', textSecondary),
-              ),
-              const SizedBox(height: 10),
-              AnimatedListItem(
-                index: 8,
-                child: _StatsRow(
-                  sessions: totalSessions,
-                  volume: totalVolume,
-                  cardColor: cardColor,
-                  dividerColor: dividerColor,
-                  textPrimary: textPrimary,
-                  textSecondary: textSecondary,
+                // ── Logout ─────────────────────────────────────────
+                // ── Logout ─────────────────────────────────────────
+                AnimatedListItem(
+                  index: 7,
+                  child: BlocBuilder<AuthCubit, AuthState>(
+                    builder: (context, authState) {
+                      final isLoggingOut = authState is AuthLoadingState;
+
+                      return _settingsTile(
+                        icon: Iconsax.logout_14,
+                        label: isLoggingOut ? 'Logging Out...' : 'Log Out',
+                        trailing: isLoggingOut
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child:
+                                    CircularProgressIndicator(strokeWidth: 2),
+                              )
+                            : Text('Come Back Again 👋',
+                                style: TextStyle(
+                                    color: textSecondary, fontSize: 14)),
+                        cardColor: cardColor,
+                        dividerColor: dividerColor,
+                        textPrimary: colorScheme.error,
+                        onTap: isLoggingOut
+                            ? null
+                            : () {
+                                _showLogoutConfirmationDialog(context);
+                              },
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
-          );
-        },
+                const SizedBox(height: 32),
+
+                // ── Stats summary ──────────────────────────────────
+                AnimatedListItem(
+                  index: 8,
+                  child: _sectionLabel('Quick Stats', textSecondary),
+                ),
+                const SizedBox(height: 10),
+                AnimatedListItem(
+                  index: 9,
+                  child: _StatsRow(
+                    sessions: totalSessions,
+                    volume: totalVolume,
+                    cardColor: cardColor,
+                    dividerColor: dividerColor,
+                    textPrimary: textPrimary,
+                    textSecondary: textSecondary,
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -184,6 +245,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
+  // 👈 ضفنا بارامتر onTap وخلينا الودجت ترجع InkWell
   Widget _settingsTile({
     required IconData icon,
     required String label,
@@ -191,28 +253,93 @@ class ProfilePage extends StatelessWidget {
     required Color cardColor,
     required Color dividerColor,
     required Color textPrimary,
+    VoidCallback? onTap, // 👈 هنا
   }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(
-        color: cardColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: dividerColor),
+    return InkWell(
+      onTap: onTap, // 👈 هنا
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: dividerColor),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: AppColors.primary, size: 20),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Text(label,
+                  style: TextStyle(
+                      color: textPrimary,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500)),
+            ),
+            trailing,
+          ],
+        ),
       ),
-      child: Row(
-        children: [
-          Icon(icon, color: AppColors.primary, size: 20),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Text(label,
-                style: TextStyle(
-                    color: textPrimary,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500)),
+    );
+  }
+
+  void _showLogoutConfirmationDialog(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
-          trailing,
-        ],
-      ),
+          title: Row(
+            children: [
+              Icon(Iconsax.logout_1, color: colorScheme.error),
+              const SizedBox(width: 10),
+              const Text('Log Out'),
+            ],
+          ),
+          content: const Text(
+            'Are you sure you want to log out of your account?',
+            style: TextStyle(fontSize: 16),
+          ),
+          actions: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: colorScheme.primary,
+                foregroundColor: colorScheme.primary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              onPressed: () {
+                Navigator.pop(dialogContext);
+              },
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            const SizedBox(height: 8),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: colorScheme.error,
+                foregroundColor: colorScheme.onError,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              onPressed: () {
+                Navigator.pop(dialogContext);
+                context.read<AuthCubit>().signOut();
+              },
+              child: const Text('Log Out'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -244,7 +371,8 @@ class _ThemeToggleTile extends StatelessWidget {
           color: cardColor,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isDark ? AppColors.primary.withOpacity(0.4) : dividerColor,
+            color:
+                isDark ? AppColors.primary.withValues(alpha: .4) : dividerColor,
           ),
         ),
         child: Row(
@@ -297,6 +425,7 @@ class _ThemeToggleTile extends StatelessWidget {
 
 class _AnimatedToggle extends StatelessWidget {
   final bool isOn;
+
   const _AnimatedToggle({required this.isOn});
 
   @override
@@ -349,11 +478,15 @@ class _StatsRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        _miniStat('🔥', 0, 'Day Streak', cardColor, dividerColor, textPrimary, textSecondary),
+        _miniStat('🔥', 0, 'Day Streak', cardColor, dividerColor, textPrimary,
+            textSecondary),
         const SizedBox(width: 10),
-        _miniStat('💪', sessions, 'Workouts', cardColor, dividerColor, textPrimary, textSecondary),
+        _miniStat('💪', sessions, 'Workouts', cardColor, dividerColor,
+            textPrimary, textSecondary),
         const SizedBox(width: 10),
-        _miniStat('⚖️', volume, 'Volume', cardColor, dividerColor, textPrimary, textSecondary, suffix: ' kg'),
+        _miniStat('⚖️', volume, 'Volume', cardColor, dividerColor, textPrimary,
+            textSecondary,
+            suffix: ' kg'),
       ],
     );
   }

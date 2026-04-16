@@ -18,7 +18,9 @@ class HomePage extends StatelessWidget {
     final textSecondary = theme.textTheme.bodyMedium?.color ?? Colors.grey;
 
     return Scaffold(
-      appBar: AppBar(
+        appBar: AppBar(
+          leading:const SizedBox.shrink(),
+
         title: const Text('Fitness Tracker'),
         actions: [
           IconButton(
@@ -67,7 +69,7 @@ class HomePage extends StatelessWidget {
         children: [
           AnimatedListItem(
             index: 0,
-            child: Icon(Iconsax.weight, size: 64, color: textSecondary.withOpacity(0.5)),
+            child: Icon(Iconsax.weight, size: 64, color: textSecondary.withValues(alpha: .5)),
           ),
           const SizedBox(height: 16),
           const AnimatedListItem(
@@ -87,10 +89,14 @@ class HomePage extends StatelessWidget {
           const SizedBox(height: 24),
           AnimatedListItem(
             index: 3,
-            child: ElevatedButton.icon(
-              onPressed: () => _showNewSessionSheet(context),
-              icon: const Icon(Iconsax.add),
-              label: const Text('Start Workout'),
+            child: SizedBox(
+              width: 320,
+              height: 52,
+              child: ElevatedButton.icon(
+                onPressed: () => _showNewSessionSheet(context),
+                icon: const Icon(Iconsax.add),
+                label: const Text('Start Workout'),
+              ),
             ),
           ),
         ],
@@ -128,7 +134,10 @@ class HomePage extends StatelessWidget {
       isScrollControlled: true,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
       ),
       builder: (_) => NewSessionBottomSheet(
         onCreateSession: (name) async {

@@ -151,7 +151,12 @@ class _ProgressPageState extends State<ProgressPage> {
 
   Widget _statCard(IconData icon, double value, String label, Color color, ThemeData theme, Color textSecondary, {String suffix = ''}) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.only(
+        left: 16,
+        right: 16,
+        top: 12,
+        bottom: 12,
+      ),
       decoration: BoxDecoration(
         color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(12),

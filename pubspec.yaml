@@ -28,6 +28,10 @@ dependencies:
   iconsax:
   shared_preferences:
   device_preview: ^1.1.0
+  firebase_core: ^4.7.0
+  firebase_auth: ^6.4.0
+  google_sign_in: ^7.2.0
+  dartz: ^0.10.1
 
 dev_dependencies:
   flutter_test:

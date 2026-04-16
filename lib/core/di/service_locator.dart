@@ -1,4 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
+import '../../features/auth/data/datasource/firebase_auth_datasource.dart';
+import '../../features/auth/data/repo/auth_repo_impl.dart';
+import '../../features/auth/domain/repos/auth_repository.dart';
+import '../../features/auth/presentation/cubit/auth_cubit.dart';
 import '../../features/exercise_library/data/datasourcse/exercise_local_datasource.dart';
 import '../../features/exercise_library/data/repoImpl/exercise_repo_impl.dart';
 import '../../features/exercise_library/domain/repos/exercise.dart';
@@ -35,12 +40,22 @@ Future<void> initDependencies() async {
   );
   sl.registerLazySingleton(() => GetExercisesUsecase(sl()));
   sl.registerFactory(() => ExerciseCubit(sl()));
+  sl.registerFactory(() => AuthCubit(sl()));
+  sl.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
+
+
+  sl.registerLazySingleton<FirebaseAuthDataSource>(
+        () => FirebaseAuthDataSource(),
+  );
 
   sl.registerLazySingleton<ProgressLocalDatasource>(
     () => ProgressLocalDatasourceImpl(sl()),
   );
   sl.registerLazySingleton<ProgressRepository>(
     () => ProgressRepositoryImpl(sl()),
+  );
+  sl.registerLazySingleton<AuthRepository>(
+        () => AuthRepoImpl(sl()),
   );
   sl.registerLazySingleton(() => GetProgressUsecase(sl()));
 
@@ -68,4 +83,5 @@ Future<void> initDependencies() async {
 
   sl.registerLazySingleton(() => GenerateWorkoutUsecase());
   sl.registerFactory(() => GeneratorCubit(sl()));
+
 }
