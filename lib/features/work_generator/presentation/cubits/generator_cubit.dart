@@ -6,7 +6,7 @@ import '../../domain/generated_workout.dart';
 part 'generator_state.dart';
 
 class GeneratorCubit extends Cubit<GeneratorState> {
-  final GenerateWorkoutUsecase _usecase;
+  final GenerateWorkoutUseCase _usecase;
 
   GeneratorCubit(this._usecase) : super(GeneratorInitial());
 

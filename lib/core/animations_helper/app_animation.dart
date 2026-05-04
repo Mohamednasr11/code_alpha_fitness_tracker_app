@@ -7,7 +7,7 @@ class SlideUpRoute extends PageRouteBuilder {
       : super(
           pageBuilder: (_, __, ___) => page,
           transitionsBuilder: (_, animation, __, child) {
-            const begin = Offset(0, 0.08);//8%
+            const begin = Offset(0, 0.08);//   من 0%    الي 8%
             const end = Offset.zero;
             final tween = Tween(begin: begin, end: end)
                 .chain(CurveTween(curve: Curves.easeOutCubic));
@@ -52,7 +52,7 @@ class AnimatedListItem extends StatefulWidget {
 
   @override
   State<AnimatedListItem> createState() => _AnimatedListItemState();
-}
+}//المصري
 
 class _AnimatedListItemState extends State<AnimatedListItem>
     with SingleTickerProviderStateMixin {
@@ -239,7 +239,7 @@ class AnimatedCounter extends StatefulWidget {
 
   @override
   State<AnimatedCounter> createState() => _AnimatedCounterState();
-}
+}// المصري
 
 class _AnimatedCounterState extends State<AnimatedCounter>
     with SingleTickerProviderStateMixin {

@@ -5,9 +5,9 @@ import '../../../exercise_library/domain/usecases/exercise.dart';
 part 'exercise_state.dart';
 
 class ExerciseCubit extends Cubit<ExerciseState> {
-  final GetExercisesUsecase _usecase;
+  final GetExercisesUseCase _useCase;
 
-  ExerciseCubit(this._usecase) : super(ExerciseInitial());
+  ExerciseCubit(this._useCase) : super(ExerciseInitial());
 
   String _selectedMuscleGroup = 'All';
   String _searchQuery = '';
@@ -15,7 +15,7 @@ class ExerciseCubit extends Cubit<ExerciseState> {
   Future<void> loadExercises() async {
     emit(ExerciseLoading());
     try {
-      final exercises = await _usecase.all();
+      final exercises = await _useCase.all();
       emit(ExerciseLoaded(
         exercises: exercises,
         filtered: exercises,

@@ -41,6 +41,7 @@ class WorkoutDetailPage extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
+            centerTitle: true,
             title: Text(current.name),
             leading: const SizedBox.shrink(),
             actions: [

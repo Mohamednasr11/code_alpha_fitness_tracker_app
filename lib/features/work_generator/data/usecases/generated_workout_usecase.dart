@@ -1,6 +1,6 @@
 import '../../domain/generated_workout.dart';
 
-class GenerateWorkoutUsecase {
+class GenerateWorkoutUseCase {
   List<GeneratedWorkoutDay> call(GeneratorInput input) {
     final days = _getDayCount(input.daysPerWeek);
     final split = _getSplit(input.goal, days);
@@ -125,7 +125,7 @@ class GenerateWorkoutUsecase {
       'Deadlift',
       'Pull Up',
       'Barbell Row',
-      'Lat Pulldown',
+      'Lat Pull down',
       'Seated Cable Row'
     ],
     'Legs': [
@@ -147,7 +147,7 @@ class GenerateWorkoutUsecase {
     'Arms': [
       'Barbell Curl',
       'Hammer Curl',
-      'Tricep Pushdown',
+      'Triceps Pushdown',
       'Skull Crusher',
       'Dips'
     ],

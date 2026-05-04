@@ -10,7 +10,7 @@ class ExerciseInitial extends ExerciseState {}
 class ExerciseLoading extends ExerciseState {}
 
 class ExerciseLoaded extends ExerciseState {
-  final List<Exercise> exercises;
+  final List<Exercise> exercises;//
   final List<Exercise> filtered;
   final String selectedMuscleGroup;
 

@@ -38,7 +38,7 @@ Future<void> initDependencies() async {
   sl.registerLazySingleton<ExerciseRepository>(
     () => ExerciseRepositoryImpl(sl()),
   );
-  sl.registerLazySingleton(() => GetExercisesUsecase(sl()));
+  sl.registerLazySingleton(() => GetExercisesUseCase(sl()));
   sl.registerFactory(() => ExerciseCubit(sl()));
   sl.registerFactory(() => AuthCubit(sl()));
   sl.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
@@ -81,7 +81,7 @@ Future<void> initDependencies() async {
       ));
   sl.registerLazySingleton(()=>ThemeCubit());
 
-  sl.registerLazySingleton(() => GenerateWorkoutUsecase());
+  sl.registerLazySingleton(() => GenerateWorkoutUseCase());
   sl.registerFactory(() => GeneratorCubit(sl()));
 
 }

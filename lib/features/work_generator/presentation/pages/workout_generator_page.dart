@@ -26,7 +26,8 @@ class _WorkoutGeneratorPageState extends State<WorkoutGeneratorPage> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: const SizedBox.shrink(),
+       leading: const SizedBox.shrink(),
+        centerTitle: true,
         title: const Text('Workout Generator'),
         actions: [
           BlocBuilder<GeneratorCubit, GeneratorState>(
@@ -234,7 +235,7 @@ class _WorkoutGeneratorPageState extends State<WorkoutGeneratorPage> {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  primaryColor.withValues(alpha: .2),
+                  primaryColor.withValues( alpha:0.2),
                   primaryColor.withValues(alpha: 0.05),
                 ],
               ),

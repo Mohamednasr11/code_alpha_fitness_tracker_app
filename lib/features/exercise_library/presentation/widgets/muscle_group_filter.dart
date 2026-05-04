@@ -57,7 +57,7 @@ class MuscleGroupFilter extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         scrollDirection: Axis.horizontal,
         itemCount: _groups.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        separatorBuilder: (_, __) => const SizedBox(width: 16),
         itemBuilder: (_, i) {
           final group = _groups[i];
           final isSelected = group == selected;

@@ -9,6 +9,7 @@ class AuthLoadingState extends AuthState {}
 class AuthSuccessState extends AuthState {
   final AppUser user;
   AuthSuccessState(this.user);
+
 }
 
 class AuthUnauthenticatedState extends AuthState {}

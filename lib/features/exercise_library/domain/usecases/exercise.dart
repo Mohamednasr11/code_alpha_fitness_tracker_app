@@ -1,10 +1,10 @@
 import '../entities/exercise.dart';
 import '../repos/exercise.dart';
 
-class GetExercisesUsecase {
+class GetExercisesUseCase {
   final ExerciseRepository _repository;
 
-  GetExercisesUsecase(this._repository);
+  GetExercisesUseCase(this._repository);
 
   Future<List<Exercise>> all() => _repository.getAllExercises();
 

@@ -46,22 +46,18 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> registerWithEmail(String email, String password) async {
     emit(AuthLoadingState());
-    _isRegister=true;
+    _isRegister = true;
 
     final result = await _authRepository.registerWithEmail(email, password);
 
-    result.fold(
-      (failure) async{
-        _isRegister=false;
-        emit(AuthFailureState(failure));
-      },
-      (user) async{
-        await _authRepository.signOut();
-        _isRegister=false;
-        emit(AuthRegistrationSuccessState());
-
-      }
-    );
+    result.fold((failure) async {
+      _isRegister = false;
+      emit(AuthFailureState(failure));
+    }, (user) async {
+      await _authRepository.signOut();
+      _isRegister = false;
+      emit(AuthRegistrationSuccessState());
+    });
   }
 
   // ─── Sign In with Google ───────────────────────────────
@@ -72,7 +68,7 @@ class AuthCubit extends Cubit<AuthState> {
     final result = await _authRepository.signInWithGoogle();
     await GoogleSignIn.instance.initialize(
       serverClientId:
-      '1014055793810-k53p5s65v86b14asksk2efj48v2koq9d.apps.googleusercontent.com',
+          '1014055793810-k53p5s65v86b14asksk2efj48v2koq9d.apps.googleusercontent.com',
     );
 
     result.fold(
@@ -96,5 +92,6 @@ class AuthCubit extends Cubit<AuthState> {
   // ─── Current User ──────────────────────────────────────
 
   AppUser? get currentUser => _authRepository.currentUser;
+
   String get email => currentUser!.email;
 }

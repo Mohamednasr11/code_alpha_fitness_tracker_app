@@ -13,3 +13,15 @@ class AppUser {
     this.photoUrl,
   });
 }
+
+class Products {
+  final String id;
+  final String title;
+  final String image;
+
+  const Products({
+    required this.title,
+    required this.id,
+    required this.image
+  });
+}

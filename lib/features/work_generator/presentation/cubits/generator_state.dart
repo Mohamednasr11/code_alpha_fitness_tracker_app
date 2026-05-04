@@ -3,6 +3,8 @@ part of 'generator_cubit.dart';
 abstract class GeneratorState extends Equatable {
   @override
   List<Object?> get props => [];
+
+
 }
 
 class GeneratorInitial extends GeneratorState {}
@@ -17,11 +19,13 @@ class GeneratorLoaded extends GeneratorState {
 
   @override
   List<Object?> get props => [days, input];
+
 }
 
 class GeneratorError extends GeneratorState {
   final String message;
   GeneratorError(this.message);
+
 
   @override
   List<Object?> get props => [message];
