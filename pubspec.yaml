@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
 
   # State Management
-  flutter_bloc: 
+  flutter_bloc:
   equatable:
 
   # Dependency Injection
@@ -44,3 +44,11 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+  fonts:
+    # 🔹 English Font
+    - family: Lato
+      fonts:
+        - asset: assets/fonts/english/lato/Lato-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/english/lato/Lato-Regular.ttf
+          weight: 400

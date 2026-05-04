@@ -6,6 +6,7 @@ class AppTheme {
 
   // ─── Light Theme ───────────────────────────────────────────
   static ThemeData get lightTheme => ThemeData(
+    fontFamily: 'Lato',
     useMaterial3: true,
     brightness: Brightness.light,
     scaffoldBackgroundColor: const Color(0xFFF5F5F5),
@@ -98,6 +99,7 @@ class AppTheme {
 
   // ─── Dark Theme ────────────────────────────────────────────
   static ThemeData get darkTheme => ThemeData(
+    fontFamily: 'Lato',
     useMaterial3: true,
     brightness: Brightness.dark,
     scaffoldBackgroundColor: AppColors.background,

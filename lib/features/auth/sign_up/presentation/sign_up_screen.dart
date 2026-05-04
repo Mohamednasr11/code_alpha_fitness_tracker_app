@@ -70,7 +70,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text('Start your journey to a healthier you.',
+                  Text('Start your journey to a healthier way.',
                       style: theme.textTheme.bodyMedium),
                   const SizedBox(height: 40),
 
@@ -119,7 +119,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: ElevatedButton(
                       onPressed: isLoading ? null : _onRegister,
                       child: isLoading
-                      // 👈 تصغير حجم دائرة التحميل عشان متبوظش شكل الزرار
                           ? const SizedBox(
                         width: 24,
                         height: 24,
@@ -160,19 +159,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final password = _passwordController.text.trim();
     final confirm = _confirmPasswordController.text.trim();
 
-    // تحقق من أن الإيميل والباسورد مش فاضيين
     if (email.isEmpty || password.isEmpty) {
       _showError('Please fill all fields');
       return;
     }
 
-    // تحقق من تطابق الباسورد (لو أضفتها)
     if (password != confirm) {
       _showError('Passwords do not match');
       return;
     }
 
-    // استدعاء دالة التسجيل
     context.read<AuthCubit>().registerWithEmail(email, password);
   }
 

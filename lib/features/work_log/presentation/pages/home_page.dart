@@ -5,12 +5,31 @@ import 'package:iconsax/iconsax.dart';
 import '../../../../core/routing/app_routing.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/animations_helper/app_animation.dart';
+import '../../../auth/presentation/cubit/auth_cubit.dart';
 import '../cubits/workout_cubit.dart';
 import '../widgets/new_session_n=bottom_sheet.dart';
 import '../widgets/session_card.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String _getDisplayName(String email) {
+    final localPart = email.split('@').first;
+    final nameOnly=localPart.split(RegExp(r'\d'))[0];
+    final parts = nameOnly.split(RegExp(r'[._\-]'));
+    return parts
+        .take(2)
+        .map((p) => p.isNotEmpty
+            ? '${p[0].toUpperCase()}${p.substring(1).toLowerCase()}'
+            : '')
+        .where((p) => p.isNotEmpty)
+        .join(' ');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +37,39 @@ class HomePage extends StatelessWidget {
     final textSecondary = theme.textTheme.bodyMedium?.color ?? Colors.grey;
 
     return Scaffold(
-        appBar: AppBar(
-          leading:const SizedBox.shrink(),
-
-        title: const Text('Fitness Tracker'),
+      appBar: AppBar(
+        leading: const SizedBox.shrink(),
+        toolbarHeight: 100,
+        leadingWidth: 0,
+        titleSpacing: 16,
+        title: BlocBuilder<AuthCubit, AuthState>(
+          builder: (context, state) {
+            if (state is AuthSuccessState) {
+              final displayName = _getDisplayName(state.user.email);
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    textAlign: TextAlign.start,
+                    'Welcome',
+                    style: TextStyle(color: theme.primaryColor),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    displayName,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: theme.disabledColor,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              );
+            }
+            return const Text('Fitness Tracker');
+          },
+        ),
         actions: [
           IconButton(
             icon: const Icon(Iconsax.book_1),
@@ -34,8 +82,7 @@ class HomePage extends StatelessWidget {
       body: BlocBuilder<WorkoutCubit, WorkoutState>(
         builder: (context, state) {
           if (state is WorkoutLoading) {
-            return const Center(
-                child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (state is WorkoutError) {
             return Center(
@@ -69,15 +116,14 @@ class HomePage extends StatelessWidget {
         children: [
           AnimatedListItem(
             index: 0,
-            child: Icon(Iconsax.weight, size: 64, color: textSecondary.withValues(alpha: .5)),
+            child: Icon(Iconsax.weight,
+                size: 64, color: textSecondary.withValues(alpha: .5)),
           ),
           const SizedBox(height: 16),
           const AnimatedListItem(
             index: 1,
             child: Text('No workouts yet',
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold)),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           ),
           const SizedBox(height: 8),
           AnimatedListItem(

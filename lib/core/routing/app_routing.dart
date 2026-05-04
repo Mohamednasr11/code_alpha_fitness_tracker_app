@@ -1,4 +1,5 @@
 import 'package:fitness_tracker/features/auth/sign_up/presentation/sign_up_screen.dart';
+import 'package:fitness_tracker/features/profile_page.dart';
 import 'package:flutter/material.dart';
 import '../../features/auth/login/presentation/login_screen.dart';
 import '../../features/exercise_library/presentation/pages/exercise_library_page.dart';
@@ -18,6 +19,8 @@ class AppRouter {
   static const String splashScreen = '/splash-screen';
   static const String loginScreen = '/login-screen';
   static const String registerScreen = '/register-screen';
+  static const String profileScreen = '/profile-screen';
+
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -30,6 +33,8 @@ class AppRouter {
 
       case exerciseLibrary:
         return _buildRoute(const ExerciseLibraryPage());
+      case profileScreen:
+        return _buildRoute(const ProfilePage());
       case splashScreen:
         return _buildRoute(const SplashScreen());
       case loginScreen:

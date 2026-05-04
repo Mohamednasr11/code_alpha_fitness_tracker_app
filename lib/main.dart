@@ -2,9 +2,9 @@ import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fitness_tracker/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:fitness_tracker/firebase_options.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 import 'core/di/service_locator.dart';
 import 'core/routing/app_routing.dart';
@@ -16,11 +16,24 @@ import 'features/work_progress/presentation/cubits/progress_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await GoogleSignIn.instance.initialize();
+
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } on FirebaseException catch (e) {
+    if (e.code != 'duplicate-app') rethrow;
+  }
+
+
+
   await initDependencies();
+
   runApp(
-    const FitnessTrackerApp(),
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => const FitnessTrackerApp(),
+    ),
   );
 }
 
@@ -41,6 +54,7 @@ class FitnessTrackerApp extends StatelessWidget {
         builder: (context, themeMode) {
           return MaterialApp(
             locale: DevicePreview.locale(context),
+            builder: DevicePreview.appBuilder,
             title: 'Fitness Tracker',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,

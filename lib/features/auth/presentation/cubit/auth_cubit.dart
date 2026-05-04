@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fitness_tracker/features/auth/domain/entities/app_user.dart';
 import 'package:fitness_tracker/features/auth/domain/repos/auth_repository.dart';
 import 'package:fitness_tracker/core/utils/auth_failure.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 part 'auth_state.dart';
 
@@ -69,6 +70,10 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoadingState());
 
     final result = await _authRepository.signInWithGoogle();
+    await GoogleSignIn.instance.initialize(
+      serverClientId:
+      '1014055793810-k53p5s65v86b14asksk2efj48v2koq9d.apps.googleusercontent.com',
+    );
 
     result.fold(
       (failure) => emit(AuthFailureState(failure)),
@@ -91,4 +96,5 @@ class AuthCubit extends Cubit<AuthState> {
   // ─── Current User ──────────────────────────────────────
 
   AppUser? get currentUser => _authRepository.currentUser;
+  String get email => currentUser!.email;
 }

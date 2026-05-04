@@ -40,7 +40,9 @@ class ProfilePage extends StatelessWidget {
         }
       },
       child: Scaffold(
-        appBar: AppBar(title: const Text('Profile')),
+        appBar: AppBar(
+          leading: const SizedBox.shrink(),
+        ),
         body: BlocBuilder<ProgressCubit, ProgressState>(
           builder: (context, state) {
             double totalSessions = 0;

@@ -18,7 +18,7 @@ class FirebaseAuthDataSource {
     try {
       googleUser = await GoogleSignIn.instance.authenticate();
     } catch (_) {
-      return null; // cancel
+      return null;
     }
 
     final clientAuth = await googleUser.authorizationClient
