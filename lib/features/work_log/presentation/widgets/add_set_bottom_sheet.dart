@@ -41,7 +41,7 @@ class _AddSetBottomSheetState extends State<AddSetBottomSheet> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textPrimary = theme.textTheme.bodyLarge?.color ?? Colors.black;
-    final dividerColor = theme.dividerTheme.color ?? Colors.grey.withOpacity(0.2);
+    final dividerColor = theme.dividerTheme.color ?? Colors.grey.withValues(alpha: .2);
 
     return BlocProvider(
       create: (_) => sl<ExerciseCubit>()..loadExercises(),

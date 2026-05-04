@@ -1,8 +1,6 @@
-import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fitness_tracker/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:fitness_tracker/firebase_options.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,10 +28,7 @@ void main() async {
   await initDependencies();
 
   runApp(
-    DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (context) => const FitnessTrackerApp(),
-    ),
+    const FitnessTrackerApp(),
   );
 }
 
@@ -53,8 +48,6 @@ class FitnessTrackerApp extends StatelessWidget {
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, themeMode) {
           return MaterialApp(
-            locale: DevicePreview.locale(context),
-            builder: DevicePreview.appBuilder,
             title: 'Fitness Tracker',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,

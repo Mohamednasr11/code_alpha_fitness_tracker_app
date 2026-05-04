@@ -5,6 +5,7 @@ import 'package:iconsax/iconsax.dart';
 import '../core/theme/app_colors.dart';
 import '../core/animations_helper/app_animation.dart';
 import '../core/theme/cubit/theme_cubit.dart';
+import '../core/utils/get_name.dart';
 import 'auth/presentation/cubit/auth_cubit.dart';
 import 'work_progress/presentation/cubits/progress_cubit.dart';
 import '../core/routing/app_routing.dart';
@@ -28,7 +29,7 @@ class ProfilePage extends StatelessWidget {
           Navigator.pushNamedAndRemoveUntil(
             context,
             AppRouter.loginScreen,
-            (route) => false,
+                (route) => false,
           );
         } else if (state is AuthFailureState) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -44,13 +45,13 @@ class ProfilePage extends StatelessWidget {
           leading: const SizedBox.shrink(),
         ),
         body: BlocBuilder<ProgressCubit, ProgressState>(
-          builder: (context, state) {
+          builder: (context, progressState) {
             double totalSessions = 0;
             double totalVolume = 0;
 
-            if (state is ProgressLoaded) {
-              totalSessions = state.stats['total_sessions'] ?? 0;
-              totalVolume = state.stats['total_volume'] ?? 0;
+            if (progressState is ProgressLoaded) {
+              totalSessions = progressState.stats['total_sessions'] ?? 0;
+              totalVolume = progressState.stats['total_volume'] ?? 0;
             }
 
             return ListView(
@@ -89,20 +90,37 @@ class ProfilePage extends StatelessWidget {
                             ),
                           ),
                         ),
+                        const SizedBox(height: 16),
+                        BlocBuilder<AuthCubit, AuthState>(
+                          builder: (context, authState) {
+                            if (authState is AuthSuccessState) {
+                              final displayName = AppHelpers.getDisplayName(authState.user.email);
+                              return Column(
+                                children: [
+                                  Text(
+                                    'Fitness Tracker App',
+                                    style: TextStyle(
+                                      color: textSecondary,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    ' 7asshh ya $displayName',
+                                    style: TextStyle(
+                                      color: colorScheme.secondary,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }
+                            return const SizedBox.shrink();
+                          },
+                        ),
                         const SizedBox(height: 12),
-                        Text(
-                          'Fitness Tracker App',
-                          style: TextStyle(
-                            color: textPrimary,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Flutter CODE ONLY 💪',
-                          style: TextStyle(color: textSecondary, fontSize: 14),
-                        ),
                       ],
                     ),
                   ),
@@ -173,7 +191,6 @@ class ProfilePage extends StatelessWidget {
                 const SizedBox(height: 8),
 
                 // ── Logout ─────────────────────────────────────────
-                // ── Logout ─────────────────────────────────────────
                 AnimatedListItem(
                   index: 7,
                   child: BlocBuilder<AuthCubit, AuthState>(
@@ -185,22 +202,21 @@ class ProfilePage extends StatelessWidget {
                         label: isLoggingOut ? 'Logging Out...' : 'Log Out',
                         trailing: isLoggingOut
                             ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child:
-                                    CircularProgressIndicator(strokeWidth: 2),
-                              )
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
                             : Text('Come Back Again 👋',
-                                style: TextStyle(
-                                    color: textSecondary, fontSize: 14)),
+                            style: TextStyle(
+                                color: textSecondary, fontSize: 14)),
                         cardColor: cardColor,
                         dividerColor: dividerColor,
                         textPrimary: colorScheme.error,
                         onTap: isLoggingOut
                             ? null
                             : () {
-                                _showLogoutConfirmationDialog(context);
-                              },
+                          _showLogoutConfirmationDialog(context);
+                        },
                       );
                     },
                   ),
@@ -247,7 +263,6 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  // 👈 ضفنا بارامتر onTap وخلينا الودجت ترجع InkWell
   Widget _settingsTile({
     required IconData icon,
     required String label,
@@ -255,10 +270,10 @@ class ProfilePage extends StatelessWidget {
     required Color cardColor,
     required Color dividerColor,
     required Color textPrimary,
-    VoidCallback? onTap, // 👈 هنا
+    VoidCallback? onTap,
   }) {
     return InkWell(
-      onTap: onTap, // 👈 هنا
+      onTap: onTap,
       borderRadius: BorderRadius.circular(12),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -374,7 +389,7 @@ class _ThemeToggleTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color:
-                isDark ? AppColors.primary.withValues(alpha: .4) : dividerColor,
+            isDark ? AppColors.primary.withValues(alpha: .4) : dividerColor,
           ),
         ),
         child: Row(
@@ -494,15 +509,15 @@ class _StatsRow extends StatelessWidget {
   }
 
   Widget _miniStat(
-    String emoji,
-    double value,
-    String label,
-    Color cardColor,
-    Color dividerColor,
-    Color textPrimary,
-    Color textSecondary, {
-    String suffix = '',
-  }) {
+      String emoji,
+      double value,
+      String label,
+      Color cardColor,
+      Color dividerColor,
+      Color textPrimary,
+      Color textSecondary, {
+        String suffix = '',
+      }) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 14),

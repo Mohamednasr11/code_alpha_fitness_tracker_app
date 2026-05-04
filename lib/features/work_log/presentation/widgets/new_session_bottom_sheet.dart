@@ -16,12 +16,12 @@ class _NewSessionBottomSheetState extends State<NewSessionBottomSheet> {
   final _formKey = GlobalKey<FormState>();
 
   final _quickNames = [
-    'Push Day 💪',
-    'Pull Day 🏋️',
-    'Leg Day 🦵',
-    'Upper Body ⚡',
-    'Lower Body 🔋',
-    'Full Body 🏆',
+    'Push Day ',
+    'Pull Day ️',
+    'Leg Day ',
+    'Upper Body ',
+    'Lower Body ',
+    'Full Body ',
   ];
 
   @override
@@ -51,7 +51,6 @@ class _NewSessionBottomSheetState extends State<NewSessionBottomSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Handle
             Center(
               child: Container(
                 width: 40,
@@ -74,7 +73,6 @@ class _NewSessionBottomSheetState extends State<NewSessionBottomSheet> {
             ),
             const SizedBox(height: 16),
 
-            // Quick name chips
             AnimatedListItem(
               index: 1,
               child: Wrap(

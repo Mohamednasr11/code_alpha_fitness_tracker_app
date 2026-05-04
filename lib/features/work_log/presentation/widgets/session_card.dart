@@ -42,7 +42,7 @@ class SessionCard extends StatelessWidget {
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 20),
         decoration: BoxDecoration(
-          color: AppColors.error.withOpacity(0.15),
+          color: AppColors.error.withValues(alpha: .15),
           borderRadius: BorderRadius.circular(12),
         ),
         child: const Icon(Iconsax.trash, color: AppColors.error),

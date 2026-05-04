@@ -3,7 +3,7 @@ import '../../domain/entities/workout_set.dart';
 
 class SetTile extends StatelessWidget {
   final WorkoutSet set;
-  final int index; // أضفت الـ index للتحكم بتوقيت الحركة (Staggered Animation)
+  final int index;
 
   const SetTile({
     super.key,
@@ -16,9 +16,8 @@ class SetTile extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    // TweenAnimationBuilder لإضافة حركة دخول (Fade + Slide)
     return TweenAnimationBuilder<double>(
-      duration: Duration(milliseconds: 400 + (index * 100)), // تأخير بسيط لكل عنصر
+      duration: Duration(milliseconds: 400 + (index * 100)),
       tween: Tween(begin: 0.0, end: 1.0),
       builder: (context, value, child) {
         return Opacity(
@@ -33,16 +32,14 @@ class SetTile extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 8),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          // استخدام الـ Theme بدلاً من الألوان الثابتة
-          color: colorScheme.surfaceVariant.withOpacity(0.5),
+          color: colorScheme.surfaceContainerHighest.withValues(alpha: .5),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: colorScheme.outlineVariant.withOpacity(0.2),
+            color: colorScheme.outlineVariant.withValues(alpha: 0.2),
           ),
         ),
         child: Row(
           children: [
-            // رقم الجلسة بتصميم مميز
             Container(
               width: 32,
               height: 32,
@@ -60,8 +57,6 @@ class SetTile extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 16),
-
-            // التكرارات (Reps)
             Expanded(
               flex: 2,
               child: Text(
@@ -71,8 +66,6 @@ class SetTile extends StatelessWidget {
                 ),
               ),
             ),
-
-            // الوزن (Weight)
             Expanded(
               flex: 2,
               child: Text(

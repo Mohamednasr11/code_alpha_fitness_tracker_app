@@ -26,6 +26,7 @@ class _WorkoutGeneratorPageState extends State<WorkoutGeneratorPage> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: const SizedBox.shrink(),
         title: const Text('Workout Generator'),
         actions: [
           BlocBuilder<GeneratorCubit, GeneratorState>(
@@ -44,18 +45,22 @@ class _WorkoutGeneratorPageState extends State<WorkoutGeneratorPage> {
       body: BlocBuilder<GeneratorCubit, GeneratorState>(
         builder: (context, state) {
           if (state is GeneratorLoading) {
-            return Center(child: CircularProgressIndicator(color: primaryColor));
+            return Center(
+                child: CircularProgressIndicator(color: primaryColor));
           }
           if (state is GeneratorLoaded) {
-            return _buildResult(state, theme, primaryColor, textPrimary, textSecondary);
+            return _buildResult(
+                state, theme, primaryColor, textPrimary, textSecondary);
           }
-          return _buildForm(context, theme, primaryColor, textPrimary, textSecondary);
+          return _buildForm(
+              context, theme, primaryColor, textPrimary, textSecondary);
         },
       ),
     );
   }
 
-  Widget _buildForm(BuildContext context, ThemeData theme, Color primaryColor, Color textPrimary, Color textSecondary) {
+  Widget _buildForm(BuildContext context, ThemeData theme, Color primaryColor,
+      Color textPrimary, Color textSecondary) {
     return ListView(
       padding: const EdgeInsets.all(20),
       children: [
@@ -148,7 +153,8 @@ class _WorkoutGeneratorPageState extends State<WorkoutGeneratorPage> {
           index: 7,
           child: ElevatedButton.icon(
             onPressed: () => context.read<GeneratorCubit>().generate(
-                  GeneratorInput(goal: _goal, level: _level, daysPerWeek: _days),
+                  GeneratorInput(
+                      goal: _goal, level: _level, daysPerWeek: _days),
                 ),
             icon: const Icon(Iconsax.magic_star),
             label: const Text('Generate Plan'),
@@ -160,10 +166,8 @@ class _WorkoutGeneratorPageState extends State<WorkoutGeneratorPage> {
 
   Widget _sectionLabel(String text, Color color) {
     return Text(text,
-        style: TextStyle(
-            color: color,
-            fontSize: 15,
-            fontWeight: FontWeight.w600));
+        style:
+            TextStyle(color: color, fontSize: 15, fontWeight: FontWeight.w600));
   }
 
   Widget _optionGrid<T>({
@@ -185,11 +189,14 @@ class _WorkoutGeneratorPageState extends State<WorkoutGeneratorPage> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               color: isSelected
-                  ? primaryColor.withOpacity(0.12)
+                  ? primaryColor.withValues(alpha: .12)
                   : theme.cardTheme.color,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: isSelected ? primaryColor : (theme.dividerTheme.color ?? Colors.grey.withOpacity(0.2)),
+                color: isSelected
+                    ? primaryColor
+                    : (theme.dividerTheme.color ??
+                        Colors.grey.withValues(alpha: .2)),
                 width: isSelected ? 1.5 : 1,
               ),
             ),
@@ -200,8 +207,11 @@ class _WorkoutGeneratorPageState extends State<WorkoutGeneratorPage> {
                 const SizedBox(width: 8),
                 Text(e.value.$2,
                     style: TextStyle(
-                      color: isSelected ? primaryColor : theme.textTheme.bodyMedium?.color,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      color: isSelected
+                          ? primaryColor
+                          : theme.textTheme.bodyMedium?.color,
+                      fontWeight:
+                          isSelected ? FontWeight.bold : FontWeight.normal,
                       fontSize: 14,
                     )),
               ],
@@ -212,7 +222,8 @@ class _WorkoutGeneratorPageState extends State<WorkoutGeneratorPage> {
     );
   }
 
-  Widget _buildResult(GeneratorLoaded state, ThemeData theme, Color primaryColor, Color textPrimary, Color textSecondary) {
+  Widget _buildResult(GeneratorLoaded state, ThemeData theme,
+      Color primaryColor, Color textPrimary, Color textSecondary) {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
@@ -223,12 +234,12 @@ class _WorkoutGeneratorPageState extends State<WorkoutGeneratorPage> {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  primaryColor.withOpacity(0.2),
-                  primaryColor.withOpacity(0.05),
+                  primaryColor.withValues(alpha: .2),
+                  primaryColor.withValues(alpha: 0.05),
                 ],
               ),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: primaryColor.withOpacity(0.3)),
+              border: Border.all(color: primaryColor.withValues(alpha: .3)),
             ),
             child: Row(
               children: [
@@ -258,23 +269,27 @@ class _WorkoutGeneratorPageState extends State<WorkoutGeneratorPage> {
         ),
         const SizedBox(height: 16),
         ...state.days.asMap().entries.map((e) => AnimatedListItem(
-          index: e.key + 1,
-          child: _buildDayCard(e.value, theme, primaryColor, textPrimary, textSecondary),
-        )),
+              index: e.key + 1,
+              child: _buildDayCard(
+                  e.value, theme, primaryColor, textPrimary, textSecondary),
+            )),
       ],
     );
   }
 
-  Widget _buildDayCard(GeneratedWorkoutDay day, ThemeData theme, Color primaryColor, Color textPrimary, Color textSecondary) {
+  Widget _buildDayCard(GeneratedWorkoutDay day, ThemeData theme,
+      Color primaryColor, Color textPrimary, Color textSecondary) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: theme.dividerTheme.color ?? Colors.grey.withOpacity(0.2)),
+        border: Border.all(
+            color:
+                theme.dividerTheme.color ?? Colors.grey.withValues(alpha: .2)),
       ),
       child: ExpansionTile(
-        collapsedIconColor: textSecondary.withOpacity(0.5),
+        collapsedIconColor: textSecondary.withValues(alpha: .5),
         iconColor: primaryColor,
         title: Row(
           children: [
@@ -290,19 +305,24 @@ class _WorkoutGeneratorPageState extends State<WorkoutGeneratorPage> {
         ),
         subtitle: Text(
           '${day.exercises.length} exercises',
-          style: TextStyle(color: textSecondary.withOpacity(0.7), fontSize: 12),
+          style: TextStyle(
+              color: textSecondary.withValues(alpha: .7), fontSize: 12),
         ),
-        children: day.exercises.map((ex) => _buildExerciseTile(ex, theme, primaryColor, textPrimary, textSecondary)).toList(),
+        children: day.exercises
+            .map((ex) => _buildExerciseTile(
+                ex, theme, primaryColor, textPrimary, textSecondary))
+            .toList(),
       ),
     );
   }
 
-  Widget _buildExerciseTile(GeneratedExercise ex, ThemeData theme, Color primaryColor, Color textPrimary, Color textSecondary) {
+  Widget _buildExerciseTile(GeneratedExercise ex, ThemeData theme,
+      Color primaryColor, Color textPrimary, Color textSecondary) {
     return Container(
       margin: const EdgeInsets.fromLTRB(12, 0, 12, 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: (theme.dividerTheme.color ?? Colors.grey).withOpacity(0.05),
+        color: (theme.dividerTheme.color ?? Colors.grey).withValues(alpha: .05),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -331,7 +351,9 @@ class _WorkoutGeneratorPageState extends State<WorkoutGeneratorPage> {
                       fontWeight: FontWeight.bold,
                       fontSize: 13)),
               Text('Rest ${ex.rest}',
-                  style: TextStyle(color: textSecondary.withOpacity(0.6), fontSize: 11)),
+                  style: TextStyle(
+                      color: textSecondary.withValues(alpha: .6),
+                      fontSize: 11)),
             ],
           ),
         ],

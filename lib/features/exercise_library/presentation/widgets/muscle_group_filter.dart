@@ -48,7 +48,7 @@ class MuscleGroupFilter extends StatelessWidget {
     final theme = Theme.of(context);
     final cardColor = theme.cardTheme.color ?? Colors.white;
     final textSecondary = theme.textTheme.bodyMedium?.color ?? Colors.grey;
-    final dividerColor = theme.dividerTheme.color ?? Colors.grey.withOpacity(0.2);
+    final dividerColor = theme.dividerTheme.color ?? Colors.grey.withValues(alpha: .2);
     final primaryColor = theme.colorScheme.primary;
 
     return SizedBox(

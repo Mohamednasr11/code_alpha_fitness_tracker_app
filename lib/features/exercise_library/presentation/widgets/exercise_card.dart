@@ -36,7 +36,7 @@ class ExerciseCard extends StatelessWidget {
     final textPrimary = theme.textTheme.bodyLarge?.color ?? Colors.black;
     final textSecondary = theme.textTheme.bodyMedium?.color ?? Colors.grey;
     final cardColor = theme.cardTheme.color ?? Colors.white;
-    final dividerColor = theme.dividerTheme.color ?? Colors.grey.withOpacity(0.2);
+    final dividerColor = theme.dividerTheme.color ?? Colors.grey.withValues(alpha: .2);
 
     return GestureDetector(
       onTap: onTap,
@@ -91,7 +91,7 @@ class ExerciseCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.15),
+                color: color.withValues(alpha: .15),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(

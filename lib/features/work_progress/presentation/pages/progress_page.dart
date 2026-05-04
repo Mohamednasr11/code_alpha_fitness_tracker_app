@@ -31,11 +31,14 @@ class _ProgressPageState extends State<ProgressPage> {
     final textSecondary = theme.textTheme.bodyMedium?.color ?? Colors.grey;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Progress')),
+      appBar: AppBar(
+          leading: const SizedBox.shrink(),
+          title: const Text('Progress')),
       body: BlocBuilder<ProgressCubit, ProgressState>(
         builder: (context, state) {
           if (state is ProgressLoading) {
-            return Center(child: CircularProgressIndicator(color: primaryColor));
+            return Center(
+                child: CircularProgressIndicator(color: primaryColor));
           }
           if (state is ProgressError) {
             return Center(
@@ -46,7 +49,8 @@ class _ProgressPageState extends State<ProgressPage> {
             if (state.trackedExercises.isEmpty) {
               return _buildEmpty(textPrimary, textSecondary);
             }
-            return _buildContent(context, state, theme, primaryColor, textPrimary, textSecondary);
+            return _buildContent(context, state, theme, primaryColor,
+                textPrimary, textSecondary);
           }
           return const SizedBox();
         },
@@ -61,7 +65,8 @@ class _ProgressPageState extends State<ProgressPage> {
         children: [
           AnimatedListItem(
             index: 0,
-            child: Icon(Iconsax.chart, size: 64, color: textSecondary.withOpacity(0.5)),
+            child: Icon(Iconsax.chart,
+                size: 64, color: textSecondary.withValues(alpha: .5)),
           ),
           const SizedBox(height: 16),
           AnimatedListItem(
@@ -84,21 +89,29 @@ class _ProgressPageState extends State<ProgressPage> {
     );
   }
 
-  Widget _buildContent(BuildContext context, ProgressLoaded state, ThemeData theme, Color primaryColor, Color textPrimary, Color textSecondary) {
+  Widget _buildContent(
+      BuildContext context,
+      ProgressLoaded state,
+      ThemeData theme,
+      Color primaryColor,
+      Color textPrimary,
+      Color textSecondary) {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
         // Overall stats
         AnimatedListItem(
           index: 0,
-          child: _buildStatsGrid(state.stats, theme, primaryColor, textSecondary),
+          child:
+              _buildStatsGrid(state.stats, theme, primaryColor, textSecondary),
         ),
         const SizedBox(height: 24),
 
         // Exercise selector
         AnimatedListItem(
           index: 1,
-          child: _buildExerciseSelector(context, state, textPrimary, textSecondary, primaryColor, theme),
+          child: _buildExerciseSelector(
+              context, state, textPrimary, textSecondary, primaryColor, theme),
         ),
         const SizedBox(height: 16),
 
@@ -112,12 +125,14 @@ class _ProgressPageState extends State<ProgressPage> {
           const SizedBox(height: 12),
           AnimatedListItem(
             index: 3,
-            child: _buildChart(state.selectedProgress!, theme, primaryColor, textSecondary),
+            child: _buildChart(
+                state.selectedProgress!, theme, primaryColor, textSecondary),
           ),
           const SizedBox(height: 24),
           AnimatedListItem(
             index: 4,
-            child: _buildPRCard(state.selectedProgress!, theme, primaryColor, textPrimary, textSecondary),
+            child: _buildPRCard(state.selectedProgress!, theme, primaryColor,
+                textPrimary, textSecondary),
           ),
         ] else if (state.selectedProgress != null) ...[
           AnimatedListItem(
@@ -132,7 +147,8 @@ class _ProgressPageState extends State<ProgressPage> {
     );
   }
 
-  Widget _buildStatsGrid(Map<String, double> stats, ThemeData theme, Color primaryColor, Color textSecondary) {
+  Widget _buildStatsGrid(Map<String, double> stats, ThemeData theme,
+      Color primaryColor, Color textSecondary) {
     return GridView.count(
       crossAxisCount: 2,
       shrinkWrap: true,
@@ -141,15 +157,22 @@ class _ProgressPageState extends State<ProgressPage> {
       mainAxisSpacing: 12,
       childAspectRatio: 1.6,
       children: [
-        _statCard(Iconsax.activity, stats['total_sessions'] ?? 0, 'Sessions', primaryColor, theme, textSecondary),
-        _statCard(Iconsax.repeat, stats['total_sets'] ?? 0, 'Total Sets', AppColors.arms, theme, textSecondary),
-        _statCard(Iconsax.weight, stats['total_volume'] ?? 0, 'Total Volume', AppColors.legs, theme, textSecondary, suffix: ' kg'),
-        _statCard(Iconsax.book_1, stats['unique_exercises'] ?? 0, 'Exercises', AppColors.chest, theme, textSecondary),
+        _statCard(Iconsax.activity, stats['total_sessions'] ?? 0, 'Sessions',
+            primaryColor, theme, textSecondary),
+        _statCard(Iconsax.repeat, stats['total_sets'] ?? 0, 'Total Sets',
+            AppColors.arms, theme, textSecondary),
+        _statCard(Iconsax.weight, stats['total_volume'] ?? 0, 'Total Volume',
+            AppColors.legs, theme, textSecondary,
+            suffix: ' kg'),
+        _statCard(Iconsax.book_1, stats['unique_exercises'] ?? 0, 'Exercises',
+            AppColors.chest, theme, textSecondary),
       ],
     );
   }
 
-  Widget _statCard(IconData icon, double value, String label, Color color, ThemeData theme, Color textSecondary, {String suffix = ''}) {
+  Widget _statCard(IconData icon, double value, String label, Color color,
+      ThemeData theme, Color textSecondary,
+      {String suffix = ''}) {
     return Container(
       padding: const EdgeInsets.only(
         left: 16,
@@ -160,7 +183,9 @@ class _ProgressPageState extends State<ProgressPage> {
       decoration: BoxDecoration(
         color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: theme.dividerTheme.color ?? Colors.grey.withOpacity(0.2)),
+        border: Border.all(
+            color:
+                theme.dividerTheme.color ?? Colors.grey.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,7 +198,8 @@ class _ProgressPageState extends State<ProgressPage> {
               AnimatedCounter(
                 value: value,
                 suffix: suffix,
-                style: TextStyle(color: color, fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: color, fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Text(label, style: TextStyle(color: textSecondary, fontSize: 12)),
             ],
@@ -183,12 +209,19 @@ class _ProgressPageState extends State<ProgressPage> {
     );
   }
 
-  Widget _buildExerciseSelector(BuildContext context, ProgressLoaded state, Color textPrimary, Color textSecondary, Color primaryColor, ThemeData theme) {
+  Widget _buildExerciseSelector(
+      BuildContext context,
+      ProgressLoaded state,
+      Color textPrimary,
+      Color textSecondary,
+      Color primaryColor,
+      ThemeData theme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Exercise Progress',
-            style: TextStyle(color: textPrimary, fontSize: 16, fontWeight: FontWeight.bold)),
+            style: TextStyle(
+                color: textPrimary, fontSize: 16, fontWeight: FontWeight.bold)),
         const SizedBox(height: 10),
         SizedBox(
           height: 36,
@@ -203,17 +236,26 @@ class _ProgressPageState extends State<ProgressPage> {
                 onTap: () => context.read<ProgressCubit>().selectExercise(name),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                   decoration: BoxDecoration(
-                    color: isSelected ? primaryColor : (theme.dividerTheme.color ?? Colors.grey).withOpacity(0.1),
+                    color: isSelected
+                        ? primaryColor
+                        : (theme.dividerTheme.color ?? Colors.grey)
+                            .withValues(alpha:0.1),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: isSelected ? primaryColor : (theme.dividerTheme.color ?? Colors.grey.withOpacity(0.2))),
+                    border: Border.all(
+                        color: isSelected
+                            ? primaryColor
+                            : (theme.dividerTheme.color ??
+                                Colors.grey.withValues(alpha:0.2))),
                   ),
                   child: Text(
                     name,
                     style: TextStyle(
                       color: isSelected ? Colors.white : textSecondary,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      fontWeight:
+                          isSelected ? FontWeight.bold : FontWeight.normal,
                       fontSize: 13,
                     ),
                   ),
@@ -226,7 +268,8 @@ class _ProgressPageState extends State<ProgressPage> {
     );
   }
 
-  Widget _buildChartModeToggle(Color primaryColor, Color textSecondary, ThemeData theme) {
+  Widget _buildChartModeToggle(
+      Color primaryColor, Color textSecondary, ThemeData theme) {
     return Row(
       children: [
         _toggleBtn('Max Weight', 0, primaryColor, textSecondary, theme),
@@ -236,16 +279,23 @@ class _ProgressPageState extends State<ProgressPage> {
     );
   }
 
-  Widget _toggleBtn(String label, int mode, Color primaryColor, Color textSecondary, ThemeData theme) {
+  Widget _toggleBtn(String label, int mode, Color primaryColor,
+      Color textSecondary, ThemeData theme) {
     final isSelected = _chartMode == mode;
     return GestureDetector(
       onTap: () => setState(() => _chartMode = mode),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
         decoration: BoxDecoration(
-          color: isSelected ? primaryColor.withOpacity(0.15) : Colors.transparent,
+          color: isSelected
+              ? primaryColor.withValues(alpha:0.15)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: isSelected ? primaryColor : (theme.dividerTheme.color ?? Colors.grey.withOpacity(0.2))),
+          border: Border.all(
+              color: isSelected
+                  ? primaryColor
+                  : (theme.dividerTheme.color ??
+                      Colors.grey.withValues(alpha:0.2))),
         ),
         child: Text(
           label,
@@ -259,12 +309,16 @@ class _ProgressPageState extends State<ProgressPage> {
     );
   }
 
-  Widget _buildChart(ExerciseProgress progress, ThemeData theme, Color primaryColor, Color textSecondary) {
+  Widget _buildChart(ExerciseProgress progress, ThemeData theme,
+      Color primaryColor, Color textSecondary) {
     final spots = progress.entries.asMap().entries.map((e) {
-      return FlSpot(e.key.toDouble(), _chartMode == 0 ? e.value.maxWeight : e.value.totalVolume);
+      return FlSpot(e.key.toDouble(),
+          _chartMode == 0 ? e.value.maxWeight : e.value.totalVolume);
     }).toList();
 
-    final maxY = spots.isEmpty ? 0.0 : spots.map((s) => s.y).reduce((a, b) => a > b ? a : b);
+    final maxY = spots.isEmpty
+        ? 0.0
+        : spots.map((s) => s.y).reduce((a, b) => a > b ? a : b);
 
     return Container(
       height: 220,
@@ -272,21 +326,47 @@ class _ProgressPageState extends State<ProgressPage> {
       decoration: BoxDecoration(
         color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: theme.dividerTheme.color ?? Colors.grey.withOpacity(0.2)),
+        border: Border.all(
+            color: theme.dividerTheme.color ??
+                Colors.grey.withValues(alpha:0.2)),
       ),
       child: LineChart(
         LineChartData(
-          gridData: FlGridData(show: true, drawVerticalLine: false, getDrawingHorizontalLine: (_) => FlLine(color: theme.dividerTheme.color ?? Colors.grey.withOpacity(0.1), strokeWidth: 1)),
+          gridData: FlGridData(
+              show: true,
+              drawVerticalLine: false,
+              getDrawingHorizontalLine: (_) => FlLine(
+                  color: theme.dividerTheme.color ??
+                      Colors.grey.withValues(alpha:0.1),
+                  strokeWidth: 1)),
           titlesData: FlTitlesData(
-            leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 40, getTitlesWidget: (value, _) => Text(value.toStringAsFixed(0), style: TextStyle(color: textSecondary.withOpacity(0.5), fontSize: 10)))),
-            bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, getTitlesWidget: (value, _) {
-              final idx = value.toInt();
-              if (idx < 0 || idx >= progress.entries.length) return const SizedBox();
-              final date = progress.entries[idx].date;
-              return Text('${date.day}/${date.month}', style: TextStyle(color: textSecondary.withOpacity(0.5), fontSize: 10));
-            })),
-            rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            leftTitles: AxisTitles(
+                sideTitles: SideTitles(
+                    showTitles: true,
+                    reservedSize: 40,
+                    getTitlesWidget: (value, _) => Text(
+                        value.toStringAsFixed(0),
+                        style: TextStyle(
+                            color: textSecondary.withValues(alpha: .5),
+                            fontSize: 10)))),
+            bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+                    showTitles: true,
+                    getTitlesWidget: (value, _) {
+                      final idx = value.toInt();
+                      if (idx < 0 || idx >= progress.entries.length) {
+                        return const SizedBox();
+                      }
+                      final date = progress.entries[idx].date;
+                      return Text('${date.day}/${date.month}',
+                          style: TextStyle(
+                              color: textSecondary.withValues(alpha: .5),
+                              fontSize: 10));
+                    })),
+            rightTitles:
+                const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            topTitles:
+                const AxisTitles(sideTitles: SideTitles(showTitles: false)),
           ),
           borderData: FlBorderData(show: false),
           minY: 0,
@@ -297,8 +377,22 @@ class _ProgressPageState extends State<ProgressPage> {
               isCurved: true,
               color: primaryColor,
               barWidth: 3,
-              dotData: FlDotData(show: true, getDotPainter: (_, __, ___, ____) => FlDotCirclePainter(radius: 4, color: primaryColor, strokeWidth: 2, strokeColor: theme.cardTheme.color ?? Colors.white)),
-              belowBarData: BarAreaData(show: true, gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [primaryColor.withOpacity(0.3), primaryColor.withOpacity(0.0)])),
+              dotData: FlDotData(
+                  show: true,
+                  getDotPainter: (_, __, ___, ____) => FlDotCirclePainter(
+                      radius: 4,
+                      color: primaryColor,
+                      strokeWidth: 2,
+                      strokeColor: theme.cardTheme.color ?? Colors.white)),
+              belowBarData: BarAreaData(
+                  show: true,
+                  gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        primaryColor.withValues(alpha:0.3),
+                        primaryColor.withValues(alpha:0.0)
+                      ])),
             ),
           ],
         ),
@@ -306,28 +400,50 @@ class _ProgressPageState extends State<ProgressPage> {
     );
   }
 
-  Widget _buildPRCard(ExerciseProgress progress, ThemeData theme, Color primaryColor, Color textPrimary, Color textSecondary) {
-    final maxWeight = progress.entries.isEmpty ? 0.0 : progress.entries.map((e) => e.maxWeight).reduce((a, b) => a > b ? a : b);
-    final maxVolume = progress.entries.isEmpty ? 0.0 : progress.entries.map((e) => e.totalVolume).reduce((a, b) => a > b ? a : b);
-    final totalReps = progress.entries.isEmpty ? 0 : progress.entries.map((e) => e.totalReps).reduce((a, b) => a + b);
+  Widget _buildPRCard(ExerciseProgress progress, ThemeData theme,
+      Color primaryColor, Color textPrimary, Color textSecondary) {
+    final maxWeight = progress.entries.isEmpty
+        ? 0.0
+        : progress.entries
+            .map((e) => e.maxWeight)
+            .reduce((a, b) => a > b ? a : b);
+    final maxVolume = progress.entries.isEmpty
+        ? 0.0
+        : progress.entries
+            .map((e) => e.totalVolume)
+            .reduce((a, b) => a > b ? a : b);
+    final totalReps = progress.entries.isEmpty
+        ? 0
+        : progress.entries.map((e) => e.totalReps).reduce((a, b) => a + b);
 
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: theme.dividerTheme.color ?? Colors.grey.withOpacity(0.2)),
+        border: Border.all(
+            color: theme.dividerTheme.color ??
+                Colors.grey.withValues(alpha:0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Personal Records', style: TextStyle(color: textPrimary, fontWeight: FontWeight.bold, fontSize: 15)),
+          Text('Personal Records',
+              style: TextStyle(
+                  color: textPrimary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15)),
           const SizedBox(height: 16),
           Row(
             children: [
-              _prItem('🏆', 'Best Weight', maxWeight, primaryColor, textSecondary, suffix: ' kg'),
-              _prItem('🔥', 'Best Session', maxVolume, primaryColor, textSecondary, suffix: ' kg'),
-              _prItem('💪', 'Total Reps', totalReps.toDouble(), primaryColor, textSecondary),
+              _prItem(
+                  '🏆', 'Best Weight', maxWeight, primaryColor, textSecondary,
+                  suffix: ' kg'),
+              _prItem(
+                  '🔥', 'Best Session', maxVolume, primaryColor, textSecondary,
+                  suffix: ' kg'),
+              _prItem('💪', 'Total Reps', totalReps.toDouble(), primaryColor,
+                  textSecondary),
             ],
           ),
         ],
@@ -335,7 +451,9 @@ class _ProgressPageState extends State<ProgressPage> {
     );
   }
 
-  Widget _prItem(String emoji, String label, double value, Color primaryColor, Color textSecondary, {String suffix = ''}) {
+  Widget _prItem(String emoji, String label, double value, Color primaryColor,
+      Color textSecondary,
+      {String suffix = ''}) {
     return Expanded(
       child: Column(
         children: [
@@ -344,9 +462,12 @@ class _ProgressPageState extends State<ProgressPage> {
           AnimatedCounter(
             value: value,
             suffix: suffix,
-            style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold, fontSize: 15),
+            style: TextStyle(
+                color: primaryColor, fontWeight: FontWeight.bold, fontSize: 15),
           ),
-          Text(label, style: TextStyle(color: textSecondary, fontSize: 11), textAlign: TextAlign.center),
+          Text(label,
+              style: TextStyle(color: textSecondary, fontSize: 11),
+              textAlign: TextAlign.center),
         ],
       ),
     );
@@ -357,7 +478,8 @@ class _ProgressPageState extends State<ProgressPage> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-          color: (theme.dividerTheme.color ?? Colors.grey).withOpacity(0.1),
+          color: (theme.dividerTheme.color ?? Colors.grey)
+              .withValues(alpha:0.1),
           borderRadius: BorderRadius.circular(12)),
       child: Row(
         children: [

@@ -148,7 +148,7 @@ class _ShimmerBoxState extends State<ShimmerBox>
         : const Color(0xFFE0E0E0);
 
     final highlightColor = isDark
-        ? (theme.dividerTheme.color ?? const Color(0xFF2A2A2A)).withOpacity(0.8)
+        ? (theme.dividerTheme.color ?? const Color(0xFF2A2A2A)).withValues(alpha: .8)
         : const Color(0xFFF5F5F5);
 
     return AnimatedBuilder(

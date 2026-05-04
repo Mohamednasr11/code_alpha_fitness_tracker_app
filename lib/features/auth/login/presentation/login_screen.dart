@@ -18,7 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     setState(() {
-      isSeen=true;
+      isSeen=false;
     });
     super.initState();
   }
@@ -61,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   const SizedBox(height: 40),
                   Text(
-                    'Welcome Back! 👋',
+                    'Welcome Back! ',
                     style: theme.textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: colorScheme.onSurface,

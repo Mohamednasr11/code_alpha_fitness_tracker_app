@@ -1,3 +1,4 @@
+import 'package:fitness_tracker/core/utils/get_name.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
@@ -7,7 +8,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/animations_helper/app_animation.dart';
 import '../../../auth/presentation/cubit/auth_cubit.dart';
 import '../cubits/workout_cubit.dart';
-import '../widgets/new_session_n=bottom_sheet.dart';
+import '../widgets/new_session_bottom_sheet.dart';
 import '../widgets/session_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,19 +19,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String _getDisplayName(String email) {
-    final localPart = email.split('@').first;
-    final nameOnly=localPart.split(RegExp(r'\d'))[0];
-    final parts = nameOnly.split(RegExp(r'[._\-]'));
-    return parts
-        .take(2)
-        .map((p) => p.isNotEmpty
-            ? '${p[0].toUpperCase()}${p.substring(1).toLowerCase()}'
-            : '')
-        .where((p) => p.isNotEmpty)
-        .join(' ');
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -45,7 +33,7 @@ class _HomePageState extends State<HomePage> {
         title: BlocBuilder<AuthCubit, AuthState>(
           builder: (context, state) {
             if (state is AuthSuccessState) {
-              final displayName = _getDisplayName(state.user.email);
+              final displayName = AppHelpers.getDisplayName(state.user.email);
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -67,7 +55,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               );
             }
-            return const Text('Fitness Tracker');
+            return const Text('');
           },
         ),
         actions: [

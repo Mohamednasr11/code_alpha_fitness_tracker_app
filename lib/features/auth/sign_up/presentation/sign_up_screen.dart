@@ -14,6 +14,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  bool isSeen = false;
+  bool isSeen1 = false;
+
+  @override
+  void initState() {
+    setState(() {
+      isSeen = false;
+      isSeen1 = false;
+    });
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -63,7 +74,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Create Account 🚀',
+                    'Create Account ',
                     style: theme.textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: colorScheme.onSurface,
@@ -81,8 +92,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     enabled: !isLoading,
                     decoration: InputDecoration(
                       hintText: 'Email Address',
-                      prefixIcon:
-                      Icon(Icons.email_outlined, color: colorScheme.primary),
+                      prefixIcon: Icon(Icons.email_outlined,
+                          color: colorScheme.primary),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -90,12 +101,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   // Password
                   TextField(
                     controller: _passwordController,
-                    obscureText: true,
+                    obscureText: !isSeen,
                     enabled: !isLoading,
                     decoration: InputDecoration(
                       hintText: 'Password',
                       prefixIcon:
-                      Icon(Icons.lock_outline, color: colorScheme.primary),
+                          Icon(Icons.lock_outline, color: colorScheme.primary),
+                      suffix: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isSeen = !isSeen;
+                            });
+                          },
+                          child: Icon(
+                            isSeen
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
+                            color: colorScheme.primary,
+                          )),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -103,9 +126,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   // Confirm Password
                   TextField(
                     controller: _confirmPasswordController,
-                    obscureText: true,
+                    obscureText: !isSeen1,
                     enabled: !isLoading,
                     decoration: InputDecoration(
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isSeen1 = !isSeen1;
+                          });
+                        },
+                        child: Icon(
+                          isSeen1
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                          color: colorScheme.primary,
+                        ),
+                      ),
                       hintText: 'Confirm Password',
                       prefixIcon: Icon(Icons.lock_reset_outlined,
                           color: colorScheme.primary),
@@ -120,16 +156,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onPressed: isLoading ? null : _onRegister,
                       child: isLoading
                           ? const SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2.5,
-                        ),
-                      )
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2.5,
+                              ),
+                            )
                           : const Text('Sign Up',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold)),
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -139,8 +175,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     children: [
                       const Text("Already have an account?"),
                       TextButton(
-                        onPressed: isLoading ? null : () =>
-                            Navigator.pop(context),
+                        onPressed:
+                            isLoading ? null : () => Navigator.pop(context),
                         child: const Text('Login'),
                       ),
                     ],

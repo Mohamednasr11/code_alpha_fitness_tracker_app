@@ -28,14 +28,12 @@ class WorkoutDetailPage extends StatelessWidget {
 
     return BlocBuilder<WorkoutCubit, WorkoutState>(
       builder: (context, state) {
-        // Get the latest session data from state
         WorkoutSession current = session!;
         if (state is WorkoutLoaded) {
           final updated = state.sessions.where((s) => s.id == session!.id);
           if (updated.isNotEmpty) current = updated.first;
         }
 
-        // Group sets by exercise
         final Map<String, List<dynamic>> grouped = {};
         for (final set in current.sets) {
           grouped.putIfAbsent(set.exercise.name, () => []).add(set);
@@ -44,10 +42,7 @@ class WorkoutDetailPage extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: Text(current.name),
-            leading: IconButton(
-              icon: const Icon(Iconsax.arrow_left),
-              onPressed: () => Navigator.pop(context),
-            ),
+            leading: const SizedBox.shrink(),
             actions: [
               IconButton(
                 icon: const Icon(Iconsax.book_1),

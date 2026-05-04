@@ -47,10 +47,7 @@ class _ExerciseLibraryViewState extends State<_ExerciseLibraryView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Exercise Library'),
-        leading: IconButton(
-          icon: const Icon(Iconsax.arrow_left),
-          onPressed: () => Navigator.pop(context),
-        ),
+        leading: const SizedBox.shrink(),
       ),
       body: Column(
         children: [
