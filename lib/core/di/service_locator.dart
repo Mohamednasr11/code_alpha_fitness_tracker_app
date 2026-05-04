@@ -57,7 +57,7 @@ Future<void> initDependencies() async {
   sl.registerLazySingleton<AuthRepository>(
         () => AuthRepoImpl(sl()),
   );
-  sl.registerLazySingleton(() => GetProgressUsecase(sl()));
+  sl.registerLazySingleton(() => GetProgressUseCase(sl()));
 
   sl.registerLazySingleton(() => ProgressCubit(sl()));
 

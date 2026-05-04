@@ -1,5 +1,3 @@
-// D:/fitness/lib/features/splash/presentation/splash_screen.dart
-
 import 'package:flutter/material.dart';
 import '../../../core/routing/app_routing.dart';
 
@@ -13,8 +11,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    super.initState();
-    // الانتقال لصفحة تسجيل الدخول بعد 3 ثواني
+    super.initState();// اول لما التطبيق يتفتح اي الي يحصل ؟
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
         Navigator.pushReplacementNamed(context, AppRouter.loginScreen);
@@ -25,21 +22,20 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       body: Center(
         child: TweenAnimationBuilder<double>(
           duration: const Duration(milliseconds: 1500),
           tween: Tween(begin: 0.8, end: 1.2),
-          curve: Curves.easeInOutSine,
+        // معناها اكبر من 80% حجم الي 120 % حجم زي ما بنكبر الشاشه من 80 الي 120
+        curve: Curves.easeInOutCubicEmphasized,
           builder: (context, value, child) {
             return Transform.scale(
               scale: value,
               child: child,
-            );
+            ); // دي الي بتنفذ التكبير
           },
-          // يمكنك استبدال الأيقونة بشعار تطبيقك (Image.asset)
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

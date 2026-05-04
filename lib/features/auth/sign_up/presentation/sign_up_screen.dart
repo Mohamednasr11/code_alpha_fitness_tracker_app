@@ -54,6 +54,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
             } else if (state is AuthRegistrationSuccessState) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
+                  elevation: 0,
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
                   content: Text('Account created successfully! Please log in.'),
                   backgroundColor: Colors.green,
                   duration: Duration(seconds: 3),

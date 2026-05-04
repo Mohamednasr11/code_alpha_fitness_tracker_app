@@ -32,6 +32,7 @@ class _ProgressPageState extends State<ProgressPage> {
 
     return Scaffold(
       appBar: AppBar(
+          centerTitle: true,
           leading: const SizedBox.shrink(),
           title: const Text('Progress')),
       body: BlocBuilder<ProgressCubit, ProgressState>(
@@ -115,7 +116,6 @@ class _ProgressPageState extends State<ProgressPage> {
         ),
         const SizedBox(height: 16),
 
-        // Chart mode toggle
         if (state.selectedProgress != null &&
             state.selectedProgress!.entries.length > 1) ...[
           AnimatedListItem(
@@ -242,13 +242,13 @@ class _ProgressPageState extends State<ProgressPage> {
                     color: isSelected
                         ? primaryColor
                         : (theme.dividerTheme.color ?? Colors.grey)
-                            .withValues(alpha:0.1),
+                            .withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
                         color: isSelected
                             ? primaryColor
                             : (theme.dividerTheme.color ??
-                                Colors.grey.withValues(alpha:0.2))),
+                                Colors.grey.withValues(alpha: 0.2))),
                   ),
                   child: Text(
                     name,
@@ -288,14 +288,14 @@ class _ProgressPageState extends State<ProgressPage> {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
         decoration: BoxDecoration(
           color: isSelected
-              ? primaryColor.withValues(alpha:0.15)
+              ? primaryColor.withValues(alpha: 0.15)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
               color: isSelected
                   ? primaryColor
                   : (theme.dividerTheme.color ??
-                      Colors.grey.withValues(alpha:0.2))),
+                      Colors.grey.withValues(alpha: 0.2))),
         ),
         child: Text(
           label,
@@ -318,7 +318,9 @@ class _ProgressPageState extends State<ProgressPage> {
 
     final maxY = spots.isEmpty
         ? 0.0
-        : spots.map((s) => s.y).reduce((a, b) => a > b ? a : b);
+        : spots.map((s) => s.y).reduce((a, b) => a > b
+            ? a
+            : b); // دي الي بتجيبلي اعلي وزن المستخدم حققه من داله ال reduce ألجاهز في flutter طبعا
 
     return Container(
       height: 220,
@@ -327,8 +329,8 @@ class _ProgressPageState extends State<ProgressPage> {
         color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-            color: theme.dividerTheme.color ??
-                Colors.grey.withValues(alpha:0.2)),
+            color:
+                theme.dividerTheme.color ?? Colors.grey.withValues(alpha: 0.2)),
       ),
       child: LineChart(
         LineChartData(
@@ -337,7 +339,7 @@ class _ProgressPageState extends State<ProgressPage> {
               drawVerticalLine: false,
               getDrawingHorizontalLine: (_) => FlLine(
                   color: theme.dividerTheme.color ??
-                      Colors.grey.withValues(alpha:0.1),
+                      Colors.grey.withValues(alpha: 0.1),
                   strokeWidth: 1)),
           titlesData: FlTitlesData(
             leftTitles: AxisTitles(
@@ -390,8 +392,8 @@ class _ProgressPageState extends State<ProgressPage> {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        primaryColor.withValues(alpha:0.3),
-                        primaryColor.withValues(alpha:0.0)
+                        primaryColor.withValues(alpha: 0.3),
+                        primaryColor.withValues(alpha: 0.0)
                       ])),
             ),
           ],
@@ -422,8 +424,8 @@ class _ProgressPageState extends State<ProgressPage> {
         color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-            color: theme.dividerTheme.color ??
-                Colors.grey.withValues(alpha:0.2)),
+            color:
+                theme.dividerTheme.color ?? Colors.grey.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -478,8 +480,8 @@ class _ProgressPageState extends State<ProgressPage> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-          color: (theme.dividerTheme.color ?? Colors.grey)
-              .withValues(alpha:0.1),
+          color:
+              (theme.dividerTheme.color ?? Colors.grey).withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12)),
       child: Row(
         children: [

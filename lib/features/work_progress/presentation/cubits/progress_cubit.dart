@@ -6,18 +6,19 @@ import '../../domain/usecases/get_progress_usecase.dart';
 part 'progress_state.dart';
 
 class ProgressCubit extends Cubit<ProgressState> {
-  final GetProgressUsecase _usecase;
-  ProgressCubit(this._usecase) : super(ProgressInitial());
+  final GetProgressUseCase _useCase;
+
+  ProgressCubit(this._useCase) : super(ProgressInitial());
 
   Future<void> load() async {
     emit(ProgressLoading());
     try {
-      final stats = await _usecase.overallStats();
-      final exercises = await _usecase.getTrackedExercises();
+      final stats = await _useCase.overallStats();
+      final exercises = await _useCase.getTrackedExercises();
 
       ExerciseProgress? selectedProgress;
       if (exercises.isNotEmpty) {
-        selectedProgress = await _usecase.forExercise(exercises.first);
+        selectedProgress = await _useCase.forExercise(exercises.first);
       }
 
       emit(ProgressLoaded(
@@ -27,7 +28,8 @@ class ProgressCubit extends Cubit<ProgressState> {
         selectedExercise: exercises.isNotEmpty ? exercises.first : null,
       ));
     } catch (e) {
-      emit(ProgressError(e.toString()));
+      emit(ProgressError(
+          'The progress could not be loaded because of ${e.toString()}.'));
     }
   }
 
@@ -36,7 +38,7 @@ class ProgressCubit extends Cubit<ProgressState> {
     if (current is! ProgressLoaded) return;
 
     try {
-      final progress = await _usecase.forExercise(exerciseName);
+      final progress = await _useCase.forExercise(exerciseName);
       emit(current.copyWith(
         selectedExercise: exerciseName,
         selectedProgress: progress,

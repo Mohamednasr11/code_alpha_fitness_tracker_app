@@ -7,7 +7,7 @@ class SlideUpRoute extends PageRouteBuilder {
       : super(
           pageBuilder: (_, __, ___) => page,
           transitionsBuilder: (_, animation, __, child) {
-            const begin = Offset(0, 0.08);
+            const begin = Offset(0, 0.08);//8%
             const end = Offset.zero;
             final tween = Tween(begin: begin, end: end)
                 .chain(CurveTween(curve: Curves.easeOutCubic));
@@ -27,7 +27,7 @@ class FadeScaleRoute extends PageRouteBuilder {
       : super(
           pageBuilder: (_, __, ___) => page,
           transitionsBuilder: (_, animation, __, child) {
-            final scaleTween = Tween(begin: 0.94, end: 1.0)
+            final scaleTween = Tween(begin: 0.94, end: 1.0)//94%
                 .chain(CurveTween(curve: Curves.easeOutCubic));
             return ScaleTransition(
               scale: animation.drive(scaleTween),
